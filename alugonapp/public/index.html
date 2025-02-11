@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpaceStay - Find Your Perfect Space</title>
+    <title>Alugon</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">SpaceStay</div>
-            <ul>
+            <div class="logo">Alugon</div>
+            <button class="menu-toggle">&#9776;</button>
+            <ul class="nav-links">
                 <li><a href="#" class="active">Home</a></li>
                 <li><a href="#">Espaços</a></li>
                 <li><a href="#">Host</a></li>
@@ -19,11 +20,24 @@
                 <li><a href="#">Login</a></li>
             </ul>
         </nav>
+    
+        <!-- Menu lateral para mobile -->
+        <div class="mobile-menu">
+            <button class="close-menu">&times;</button>
+            <ul>
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">Espaços</a></li>
+                <li><a href="#">Host</a></li>
+                <li><a href="#">Cadastrar</a></li>
+                <li><a href="www.google.com">Login</a></li>
+            </ul>
+        </div>
     </header>
+    
 
     <main>
         <section class="hero">
-            <h1>Encontre seu espaço perfeito</h1>
+            <h1 id="title">Encontre seu espaço perfeito</h1>
             <div class="search-bar">
                 <input type="text" placeholder="Pra onde você está indo?">
                 <input type="date" placeholder="Check-in">
@@ -48,7 +62,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 SpaceStay. Todos os direitos reservados.</p>
+        <p>&copy; 2025 Alugon. Todos os direitos reservados.</p>
     </footer>
 
     <script src="app.js"></script>

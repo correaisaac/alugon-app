@@ -1,9 +1,11 @@
+
 :root {
     --primary-color: #3498db;
     --secondary-color: #3442db;
     --text-color: #333;
-    --background-color: #f9f9f9;
+    --background-color:#3498db;
     --card-background: #ffffff;
+    --footer-color: rgba(255, 255, 255, 0);
     --shadow-color: rgba(0, 0, 0, 0.1);
   }
   
@@ -17,7 +19,9 @@
     font-family: "Montserrat", sans-serif;
     line-height: 1.6;
     color: var(--text-color);
-    background-color: var(--background-color);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
   }
   
   header {
@@ -27,7 +31,12 @@
     width: 100%;
     z-index: 1000;
   }
-  
+
+  footer{
+    color: var(--text-color);
+    background-color: var(--footer-color)!important;
+  }
+
   nav {
     display: flex;
     justify-content: space-between;
@@ -67,7 +76,7 @@
   }
   
   .hero {
-    background-image: url("https://source.unsplash.com/1600x900/?travel");
+    background-image: url("https://cf.bstatic.com/xdata/images/hotel/max1024x768/413559856.jpg?k=62febf170354980a3f837f93f51c54f0873b2006bff9e926f0907ed817174494&o=&hp=1");
     background-size: cover;
     background-position: center;
     height: 500px;
@@ -197,4 +206,134 @@
     }
   }
   
+/* Botão de menu para mobile */
+.menu-toggle {
+  display: none;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+/* Estilização do menu lateral */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100vh;
+  background: var(--card-background);
+  box-shadow: 2px 0 5px var(--shadow-color);
+  padding-top: 20px;
+  transition: left 0.3s ease;
+}
+
+.mobile-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.mobile-menu ul li {
+  padding: 15px;
+  text-align: center;
+}
+
+.mobile-menu ul li a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.mobile-menu .close-menu {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Responsividade: Mostra menu lateral no mobile */
+@media (max-width: 768px) {
+  .nav-links {
+      display: none;
+  }
   
+  .menu-toggle {
+      display: block;
+  }
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--background-color);
+}
+
+.login-form {
+  background: var(--card-background);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px var(--shadow-color);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-form h2 {
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+}
+
+.input-group {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 0.7rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.login-btn:hover {
+  background-color: var(--secondary-color);
+}
+
+.register-link {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.register-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
