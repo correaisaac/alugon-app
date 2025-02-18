@@ -8,8 +8,8 @@ function Header() {
           <button className="menu-toggle">&#9776;</button>
           <ul className="nav-links">
             <li><Link to="/" className="active">Home</Link></li>
-            <li><Link to="/espacos">Espaços</Link></li>
-            <li><Link to="/host">Host</Link></li>
+            <li><Link to="/espacos">Meus Espaços</Link></li>
+            <li><Link to="/perfil">Perfil</Link></li>
             <li><Link to="/cadastro">Cadastrar</Link></li>
             <li><Link to="/login">Login</Link></li>
           </ul>
@@ -21,7 +21,7 @@ function Header() {
           <ul>
             <li><Link to="/" className="active">Home</Link></li>
             <li><Link to="/espacos">Espaços</Link></li>
-            <li><Link to="/host">Host</Link></li>
+            <li><Link to="/perfil">Perfil</Link></li>
             <li><Link to="/cadastro">Cadastrar</Link></li>
             <li><Link to="/login">Login</Link></li>
           </ul>

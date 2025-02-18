@@ -46,10 +46,69 @@
   }
   
   .cadastro-btn:hover {
-    background: #218838;
+    background: #3498db;
   }
   
   .login-link {
     margin-top: 10px;
+  }
+  .cadastro-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; 
+    padding: 20px;
+  }
+  
+  .cadastro-form {
+    max-width: 400px;
+    width: 100%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .input-group {
+    margin-bottom: 15px;
+  }
+  
+  .input-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button.cadastro-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button.cadastro-btn:hover {
+    background-color: #3442db;
+  }
+  
+  .login-link {
+    text-align: center;
+    margin-top: 20px;
   }
   

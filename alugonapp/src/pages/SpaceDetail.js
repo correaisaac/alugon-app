@@ -20,6 +20,7 @@ function SpaceDetail() {
   // Chama a função para buscar o espaço ao carregar a página
   useEffect(() => {
     fetchSpaceDetails();
+    // eslint-disable-next-line
   }, [id]);
 
   if (!space) {

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-//import "./Login.css"; // Arquivo CSS para os estilos
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; 
 
 function Login() {
+  const { login } = useAuth(); 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-
+  const navigate = useNavigate(); 
   const handleSubmit = async (event) => {
     event.preventDefault();
     
@@ -17,9 +18,11 @@ function Login() {
       });
 
       const data = await response.json();
-
       if (response.ok) {
+        login(data.user, data.token); 
         alert("Login bem-sucedido!");
+
+        navigate("/perfil"); 
       } else {
         alert("Erro ao fazer login: " + data.message);
       }

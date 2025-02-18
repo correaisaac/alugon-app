@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./Cadastro.css"; // Arquivo CSS para os estilos
+import "./Cadastro.css"; 
 
 function Cadastro() {
   const [email, setEmail] = useState("");
@@ -24,13 +24,13 @@ function Cadastro() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          nome,
-          email,
-          senha,
-          dataNascimento,
-          cpf,
-          telefone,
-        }),
+          CPF: cpf, 
+          nome, 
+          data_nascimento: dataNascimento, 
+          telefone, 
+          email, 
+          senha
+        }),        
       });
 
       const data = await response.json();

@@ -26,17 +26,30 @@
     background-attachment: fixed;
   }
   
+  html, body {
+    height: 100%;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .App {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+  }
+  
+  main {
+    flex-grow: 1; 
+    padding: 20px;
+  }
+  
+  
+    
   header {
     background-color: var(--card-background);
     box-shadow: 0 2px 4px var(--shadow-color);
-    position: fixed;
+    position: flex;
     width: 100%;
     z-index: 1000;
-  }
-
-  footer{
-    color: var(--text-color);
-    background-color: var(--footer-color)!important;
   }
 
   nav {
@@ -76,26 +89,7 @@
   main {
     padding-top: 80px;
   }
-  
-  .hero {
-    background-image: url("https://cf.bstatic.com/xdata/images/hotel/max1024x768/413559856.jpg?k=62febf170354980a3f837f93f51c54f0873b2006bff9e926f0907ed817174494&o=&hp=1");
-    background-size: cover;
-    background-position: center;
-    height: 500px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
-  }
-  
-  .hero h1 {
-    font-size: 3rem;
-    margin-bottom: 2rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  }
-  
+
   .search-bar {
     display: flex;
     background-color: white;
@@ -181,7 +175,7 @@
     font-weight: 600;
     color: var(--primary-color);
   }
-  
+  /*até aqui*/
   footer {
     background-color: var(--card-background);
     text-align: center;

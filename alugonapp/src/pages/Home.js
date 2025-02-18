@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"; // Link para navegação entre páginas
 import "./Home.css"; // Estilos para o Home
 
+
 function Home() {
   const [spaces, setSpaces] = useState([]);
 
