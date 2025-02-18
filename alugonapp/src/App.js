@@ -1,8 +1,22 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Header from './pages/Header';
+import Login from './pages/Login';
+import Cadastro from './pages/Cadastro';
+import SpaceDetail from './pages/SpaceDetail'
 
 function App() {
   return (
-      <h1>Hello my friends</h1>
+    <Router>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/cadastro" element={<Cadastro />} />
+        <Route path="/space/:id" element={<SpaceDetail />} /> 
+      </Routes>
+    </Router>
   );
 }
 
