@@ -4,7 +4,7 @@ function Header() {
     return (
       <header>
         <nav>
-          <div className="logo">Alugon</div>
+          <div className="logo">AlugON</div>
           <button className="menu-toggle">&#9776;</button>
           <ul className="nav-links">
             <li><Link to="/" className="active">Home</Link></li>
