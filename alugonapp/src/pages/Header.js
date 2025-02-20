@@ -1,33 +1,49 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Header() {
-    return (
-      <header>
-        <nav>
-          <div className="logo">AlugON</div>
-          <button className="menu-toggle">&#9776;</button>
-          <ul className="nav-links">
-            <li><Link to="/" className="active">Home</Link></li>
-            <li><Link to="/espacos">Meus Espaços</Link></li>
-            <li><Link to="/perfil">Perfil</Link></li>
-            <li><Link to="/cadastro">Cadastrar</Link></li>
-            <li><Link to="/login">Login</Link></li>
-          </ul>
-        </nav>
-  
-        {/* Menu lateral para mobile */}
-        <div className="mobile-menu">
-          <button className="close-menu">&times;</button>
-          <ul>
-            <li><Link to="/" className="active">Home</Link></li>
-            <li><Link to="/espacos">Espaços</Link></li>
-            <li><Link to="/perfil">Perfil</Link></li>
-            <li><Link to="/cadastro">Cadastrar</Link></li>
-            <li><Link to="/login">Login</Link></li>
-          </ul>
-        </div>
-      </header>
-    );
-  }
+  const { user, logout } = useAuth();
+
+  const navLinks = user
+    ? [
+        { to: "/", label: "Home" },
+        { to: "/espacos", label: "Meus Espaços" },
+        { to: "/perfil", label: "Perfil" },
+      ]
+    : [
+        { to: "/", label: "Home" },
+        { to: "/cadastro", label: "Cadastrar" },
+        { to: "/login", label: "Login" },
+      ];
+
+  return (
+    <header>
+      <nav>
+        <div className="logo">AlugON</div>
+        <button className="menu-toggle">&#9776;</button>
+        <ul className="nav-links">
+          {navLinks.map((link) => (
+            <li key={link.to}>
+              <Link to={link.to} className="active">{link.label}</Link>
+            </li>
+          ))}
+          {user && <li><button onClick={logout}>Sair</button></li>}
+        </ul>
+      </nav>
+
+      {/* Menu lateral para mobile */}
+      <div className="mobile-menu">
+        <button className="close-menu">&times;</button>
+        <ul>
+          {navLinks.map((link) => (
+            <li key={link.to}>
+              <Link to={link.to} className="active">{link.label}</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </header>
+  );
+}
 
 export default Header;
