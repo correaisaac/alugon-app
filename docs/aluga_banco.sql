@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `aluga_banco`.`usuario` (
   `telefone` VARCHAR(14) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `senha` VARCHAR(255) NOT NULL,
-  `foto` VARCHAR(255) NOT NULL,
+  `foto` LONGBLOB NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -43,7 +43,9 @@ CREATE TABLE IF NOT EXISTS `aluga_banco`.`espaco` (
   `descricao` VARCHAR(600) NOT NULL,
   `valor` DECIMAL(10,2) NOT NULL,
   `responsavel` INT NOT NULL,
-  `imagem` VARCHAR(255) NOT NULL,
+  `imagem` LONGBLOB NOT NULL,
+  `cidade` VARCHAR(45) NOT NULL,
+  `bairro` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `dono_idx` (`responsavel` ASC) ,
   CONSTRAINT `dono`
@@ -59,10 +61,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aluga_banco`.`contrato` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `data_assinatura` DATETIME NOT NULL,
-  `data_venc` DATETIME NOT NULL,
   `status` ENUM('ativo', 'inativo', 'vencido', 'cancelado') NOT NULL,
   `observacao` VARCHAR(45) NOT NULL,
+  `modelo_pagamento`ENUM('diário', 'semanal', 'mensal','anual') NOT NULL,
   `condicoes_pagamento` VARCHAR(45) NOT NULL,
   `multa` DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (`id`))

@@ -111,4 +111,18 @@
     text-align: center;
     margin-top: 20px;
   }
+
+
+  .foto-perfil-preview {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .foto-perfil {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
   

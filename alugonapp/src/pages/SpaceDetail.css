@@ -65,3 +65,8 @@
     text-decoration: underline;
   }
   
+  .space-image {
+    width: 900px; /* Defina um tamanho fixo */
+    height: auto; /* Mantém a proporção da imagem */
+    border-radius: 10px; /* (Opcional) Deixa as bordas arredondadas */
+  }

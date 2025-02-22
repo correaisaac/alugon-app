@@ -213,16 +213,33 @@
 }
 
 /* Estilização do menu lateral */
+/* Botão de menu para mobile */
+.menu-toggle {
+  display: none;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-color);
+  position: absolute; /* Botão na parte direita */
+  right: 20px; /* Alinhado à direita */
+}
+
+/* Estilização do menu lateral */
 .mobile-menu {
   position: fixed;
   top: 0;
-  left: -250px;
+  right: -250px; /* Inicialmente fora da tela à direita */
   width: 250px;
   height: 100vh;
   background: var(--card-background);
-  box-shadow: 2px 0 5px var(--shadow-color);
+  box-shadow: -2px 0 5px var(--shadow-color); /* Ajuste da sombra para o lado direito */
   padding-top: 20px;
-  transition: left 0.3s ease;
+  transition: right 0.3s ease;
+}
+
+.mobile-menu.open {
+  right: 0; /* Quando o menu estiver aberto, ele aparece do lado direito */
 }
 
 .mobile-menu ul {
@@ -258,9 +275,10 @@
   }
   
   .menu-toggle {
-      display: block;
+      display: block; /* Exibe o botão de menu no mobile */
   }
 }
+
 
 .login-container {
   display: flex;

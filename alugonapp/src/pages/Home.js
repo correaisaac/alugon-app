@@ -31,6 +31,7 @@ function Home() {
           {spaces.length > 0 ? (
             spaces.map((space) => (
               <div key={space.id} className="space-card">
+                <img src={space.imagem} alt={`Imagem do espaço ${space.numero}`} className="space-image" />
                 <h3>{space.numero}</h3>
                 <p>{space.descricao}</p>
                 <p>Responsável: {space.responsavel}</p>

@@ -10,6 +10,7 @@ function Cadastro() {
   const [dataNascimento, setDataNascimento] = useState("");
   const [cpf, setCpf] = useState("");
   const [telefone, setTelefone] = useState("");
+  const [fotoPerfil, setFotoPerfil] = useState(null); // Novo estado para a foto
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,26 +21,43 @@ function Cadastro() {
     }
 
     try {
-      const response = await fetch("http://localhost:3333/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          CPF: cpf, 
-          nome, 
-          data_nascimento: dataNascimento, 
-          telefone, 
-          email, 
-          senha
-        }),        
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert("Cadastro bem-sucedido!");
+      // Se houver foto, converta para base64
+      let fotoBase64 = "";
+      if (fotoPerfil) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          fotoBase64 = reader.result;
+          enviarDados();
+        };
+        reader.readAsDataURL(fotoPerfil); // Converte a foto em base64
       } else {
-        alert("Erro ao cadastrar: " + data.message);
+        enviarDados();
       }
+
+      const enviarDados = async () => {
+        const response = await fetch("http://localhost:3333/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            CPF: cpf, 
+            nome, 
+            data_nascimento: dataNascimento, 
+            telefone, 
+            email, 
+            senha,
+            foto: fotoBase64, // Envia a foto como base64
+          }),        
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert("Cadastro bem-sucedido!");
+        } else {
+          alert("Erro ao cadastrar: " + data.message);
+        }
+      };
+
     } catch (error) {
       alert("Erro ao conectar ao servidor.");
     }
@@ -130,6 +148,16 @@ function Cadastro() {
             value={confirmarSenha}
             onChange={(e) => setConfirmarSenha(e.target.value)}
             required
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="fotoPerfil">Foto de Perfil</label>
+          <input
+            type="file"
+            id="fotoPerfil"
+            accept="image/*"
+            onChange={(e) => setFotoPerfil(e.target.files[0])} // Atualiza o estado com o arquivo
           />
         </div>
 

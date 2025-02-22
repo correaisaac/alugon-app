@@ -36,3 +36,8 @@
     margin: 5px 0;
   }
   
+  .space-image {
+    width: 300px; /* Defina um tamanho fixo */
+    height: auto; /* Mantém a proporção da imagem */
+    border-radius: 10px; /* (Opcional) Deixa as bordas arredondadas */
+  }

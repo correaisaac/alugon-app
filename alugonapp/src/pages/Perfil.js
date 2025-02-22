@@ -14,13 +14,20 @@ function Perfil() {
   }
 
   return (
-    <div  className="profile-data">
-      <h2>Perfil de {user.nome}</h2>
-      <p>Email: {user.email}</p>
-      <p>Nome: {user.nome}</p>
-      <p>CPF: {user.CPF}</p>
-      <p>Data de Nascimento: {formatDate(user.data_nascimento)}</p>
-      <button onClick={logout}>Sair</button>
+    <div className="profile-data">
+      <div className="profile-card">
+        <h2>Perfil de {user.nome}</h2>
+        <img
+          src={user.foto ? `data:image/jpeg;base64,${user.foto}` : 'default-image.jpg'} 
+          alt={`Foto de ${user.nome}`}
+          className="user-photo"
+        />
+        <p><strong>Email:</strong> {user.email}</p>
+        <p><strong>Nome:</strong> {user.nome}</p>
+        <p><strong>CPF:</strong> {user.CPF}</p>
+        <p><strong>Data de Nascimento:</strong> {formatDate(user.data_nascimento)}</p>
+        <button className="logout-button" onClick={logout}>Sair</button>
+      </div>
     </div>
   );
 }

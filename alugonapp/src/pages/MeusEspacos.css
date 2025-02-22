@@ -1,0 +1,73 @@
+.meus-espacos-container {
+    padding: 20px;
+  }
+  
+  .secoes {
+    display: block;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .espacos-alugados,
+.espacos-para-alugar {
+  width: 100%;
+  margin-bottom: 20px;
+  text-align: center; /* Alinha os textos no centro */
+}
+
+h3 {
+  text-align: center; /* Alinha o título no centro */
+}
+
+.espacos-lista {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Alinha os itens no centro */
+}
+
+.espaco-card {
+  width: 30%;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center; /* Alinha o conteúdo dentro de cada card */
+}
+
+.espaco-imagem {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+  
+  .input-group {
+    margin-bottom: 15px;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .cadastrar-btn, .alugar-btn {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .botao-cadastrar {
+    margin-top: 20px;
+  }
+  
+  .foto-preview img {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    object-fit: cover;
+  }
+  
