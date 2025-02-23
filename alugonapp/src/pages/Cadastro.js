@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./Cadastro.css"; 
+import "./Cadastro.css";
 
 function Cadastro() {
   const [email, setEmail] = useState("");
@@ -35,18 +35,18 @@ function Cadastro() {
       }
 
       const enviarDados = async () => {
-        const response = await fetch("http://localhost:3333/users", {
+        const response = await fetch("https://localhost:3333/users", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            CPF: cpf, 
-            nome, 
-            data_nascimento: dataNascimento, 
-            telefone, 
-            email, 
+            CPF: cpf,
+            nome,
+            data_nascimento: dataNascimento,
+            telefone,
+            email,
             senha,
             foto: fotoBase64, // Envia a foto como base64
-          }),        
+          }),
         });
 
         const data = await response.json();
@@ -57,7 +57,6 @@ function Cadastro() {
           alert("Erro ao cadastrar: " + data.message);
         }
       };
-
     } catch (error) {
       alert("Erro ao conectar ao servidor.");
     }
@@ -66,10 +65,9 @@ function Cadastro() {
   return (
     <div className="cadastro-container">
       <form className="cadastro-form" onSubmit={handleSubmit}>
-        <h2>Cadastre-se</h2>
-
+        <h2> Cadastre - se </h2>
         <div className="input-group">
-          <label htmlFor="nome">Nome</label>
+          <label htmlFor="nome"> Nome </label>{" "}
           <input
             type="text"
             id="nome"
@@ -79,9 +77,8 @@ function Cadastro() {
             required
           />
         </div>
-
         <div className="input-group">
-          <label htmlFor="email">E-mail</label>
+          <label htmlFor="email"> E - mail </label>{" "}
           <input
             type="email"
             id="email"
@@ -91,9 +88,8 @@ function Cadastro() {
             required
           />
         </div>
-
         <div className="input-group">
-          <label htmlFor="dataNascimento">Data de Nascimento</label>
+          <label htmlFor="dataNascimento"> Data de Nascimento </label>{" "}
           <input
             type="date"
             id="dataNascimento"
@@ -102,9 +98,8 @@ function Cadastro() {
             required
           />
         </div>
-
         <div className="input-group">
-          <label htmlFor="cpf">CPF</label>
+          <label htmlFor="cpf"> CPF </label>{" "}
           <input
             type="text"
             id="cpf"
@@ -114,9 +109,8 @@ function Cadastro() {
             required
           />
         </div>
-
         <div className="input-group">
-          <label htmlFor="telefone">Telefone</label>
+          <label htmlFor="telefone"> Telefone </label>{" "}
           <input
             type="tel"
             id="telefone"
@@ -126,9 +120,8 @@ function Cadastro() {
             required
           />
         </div>
-
         <div className="input-group">
-          <label htmlFor="senha">Senha</label>
+          <label htmlFor="senha"> Senha </label>{" "}
           <input
             type="password"
             id="senha"
@@ -138,9 +131,8 @@ function Cadastro() {
             required
           />
         </div>
-
         <div className="input-group">
-          <label htmlFor="confirmar-senha">Confirmar Senha</label>
+          <label htmlFor="confirmar-senha"> Confirmar Senha </label>{" "}
           <input
             type="password"
             id="confirmar-senha"
@@ -150,23 +142,23 @@ function Cadastro() {
             required
           />
         </div>
-
         <div className="input-group">
-          <label htmlFor="fotoPerfil">Foto de Perfil</label>
+          <label htmlFor="fotoPerfil"> Foto de Perfil </label>{" "}
           <input
             type="file"
             id="fotoPerfil"
             accept="image/*"
             onChange={(e) => setFotoPerfil(e.target.files[0])} // Atualiza o estado com o arquivo
-          />
+          />{" "}
         </div>
-
-        <button type="submit" className="cadastro-btn">Cadastrar</button>
-
+        <button type="submit" className="cadastro-btn">
+          {" "}
+          Cadastrar{" "}
+        </button>
         <p className="login-link">
-          Já tem uma conta? <Link to="/login">Faça login</Link>
-        </p>
-      </form>
+          Já tem uma conta ? <Link to="/login"> Faça login </Link>{" "}
+        </p>{" "}
+      </form>{" "}
     </div>
   );
 }

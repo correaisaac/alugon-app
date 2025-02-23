@@ -21,7 +21,7 @@ function NovoAluguel() {
   // Função para buscar os detalhes do espaço
   const fetchSpaceDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:3333/spaces/${id}`);
+      const response = await fetch(`https://localhost:3333/spaces/${id}`);
       const data = await response.json();
       setSpace(data);
       setRentalData((prevState) => ({
@@ -36,7 +36,7 @@ function NovoAluguel() {
   // Função para buscar os contratos existentes
   const fetchContracts = async () => {
     try {
-      const response = await fetch("http://localhost:3333/contracts");
+      const response = await fetch("https://localhost:3333/contracts");
       const data = await response.json();
       setContracts(data);
     } catch (error) {
@@ -51,10 +51,13 @@ function NovoAluguel() {
 
   // Função para manipular os campos de formulário
   const handleChange = (e) => {
-    setRentalData({
-      ...rentalData,
-      [e.target.name]: e.target.value,
-    }, calculateTotalValue); // Chama o cálculo sempre que os dados mudam
+    setRentalData(
+      {
+        ...rentalData,
+        [e.target.name]: e.target.value,
+      },
+      calculateTotalValue
+    ); // Chama o cálculo sempre que os dados mudam
   };
 
   // Função para calcular o valor total baseado no modelo de pagamento e no tempo de aluguel
@@ -103,34 +106,34 @@ function NovoAluguel() {
 
   // Função para submeter o formulário de novo aluguel
   // Função para submeter o formulário de novo aluguel
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Verifica se o usuário está logado
     if (!user || !token) {
       alert("Você precisa estar logado para realizar o aluguel!");
       return;
     }
-  
+
     // Verifica se um contrato foi selecionado
     if (!rentalData.contrato_id) {
       alert("Por favor, selecione um contrato.");
       return;
     }
-  
+
     // Verifica se o locatário não é o locador
     if (space.responsavel === user.id) {
       alert("O locatário não pode ser o mesmo que o locador.");
       return;
     }
-  
+
     try {
       // Criação do aluguel
-      const response = await fetch("http://localhost:3333/rentals", {
+      const response = await fetch("https://localhost:3333/rentals", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           ...rentalData,
@@ -139,22 +142,22 @@ const handleSubmit = async (e) => {
           locatario: user.id,
         }),
       });
-  
+
       if (response.ok) {
         alert("Aluguel realizado com sucesso!");
-  
+
         // Atualizar o status do espaço para indisponível
-        await fetch(`http://localhost:3333/spaces/${id}`, {
+        await fetch(`https://localhost:3333/spaces/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             disponibilidade: "indisponível", // Defina o valor adequado conforme o seu modelo
           }),
         });
-  
+
         // Redireciona para a página de detalhes do espaço após o aluguel
         navigate(`/detalhes-espaco/${id}`);
       } else {
@@ -167,17 +170,19 @@ const handleSubmit = async (e) => {
   };
 
   if (!space || !contracts.length) {
-    return <p>Carregando detalhes do espaço e contratos...</p>;
+    return <p> Carregando detalhes do espaço e contratos... </p>;
   }
 
   return (
     <div className="novo-aluguel-container">
-      <h2>Novo Aluguel - {space.nome}</h2>
-      <p><strong>Valor por período:</strong> R${space.valor}</p>
-
+      <h2> Novo Aluguel - {space.nome} </h2>{" "}
+      <p>
+        {" "}
+        <strong> Valor por período: </strong> R${space.valor}
+      </p>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="data_inicio">Data de Início</label>
+          <label htmlFor="data_inicio"> Data de Início </label>{" "}
           <input
             type="datetime-local"
             id="data_inicio"
@@ -187,9 +192,8 @@ const handleSubmit = async (e) => {
             required
           />
         </div>
-
         <div className="form-group">
-          <label htmlFor="data_fim">Data de Fim</label>
+          <label htmlFor="data_fim"> Data de Fim </label>{" "}
           <input
             type="datetime-local"
             id="data_fim"
@@ -198,11 +202,10 @@ const handleSubmit = async (e) => {
             onChange={handleChange}
             required
             onBlur={calculateTotalValue} // Chama o cálculo quando o campo perde o foco
-          />
+          />{" "}
         </div>
-
         <div className="form-group">
-          <label htmlFor="contrato_id">Selecione o Contrato</label>
+          <label htmlFor="contrato_id"> Selecione o Contrato </label>{" "}
           <select
             name="contrato_id"
             id="contrato_id"
@@ -210,7 +213,7 @@ const handleSubmit = async (e) => {
             onChange={handleChange}
             required
           >
-            <option value="">Escolha um contrato</option>
+            <option value=""> Escolha um contrato </option>{" "}
             {contracts.map((contract) => {
               const validForPeriod = isContractValidForPeriod(contract);
               return (
@@ -219,26 +222,24 @@ const handleSubmit = async (e) => {
                   value={contract.id}
                   disabled={!validForPeriod} // Desabilita contratos incompatíveis
                 >
-                  {contract.modelo_pagamento} - {contract.condicoes_pagamento}
-                  {validForPeriod ? "" : " (Incompatível com o período)"}
+                  {contract.modelo_pagamento} - {contract.condicoes_pagamento}{" "}
+                  {validForPeriod ? "" : " (Incompatível com o período)"}{" "}
                 </option>
               );
-            })}
-          </select>
+            })}{" "}
+          </select>{" "}
         </div>
-
         <div className="form-group">
-          <label htmlFor="observacao">Observações (opcional)</label>
+          <label htmlFor="observacao"> Observações(opcional) </label>{" "}
           <textarea
             id="observacao"
             name="observacao"
             value={rentalData.observacao}
             onChange={handleChange}
-          />
+          />{" "}
         </div>
-
         <div className="form-group">
-          <label htmlFor="valor_total">Valor Total</label>
+          <label htmlFor="valor_total"> Valor Total </label>{" "}
           <input
             type="text"
             id="valor_total"
@@ -247,11 +248,13 @@ const handleSubmit = async (e) => {
             readOnly
           />
         </div>
-
         <div className="form-group">
-          <button type="submit" className="submit-button">Confirmar Aluguel</button>
-        </div>
-      </form>
+          <button type="submit" className="submit-button">
+            {" "}
+            Confirmar Aluguel{" "}
+          </button>{" "}
+        </div>{" "}
+      </form>{" "}
     </div>
   );
 }

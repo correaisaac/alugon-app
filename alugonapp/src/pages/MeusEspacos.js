@@ -23,10 +23,10 @@ function MeusEspacos() {
       // Buscar espaços disponíveis e alugados
       const fetchEspacos = async () => {
         try {
-          const response = await fetch("http://localhost:3333/spaces");
+          const response = await fetch("https://localhost:3333/spaces");
           const data = await response.json();
-          setEspacosDisponiveis(data.filter(espaco => !espaco.alugado));
-          setEspacosAlugados(data.filter(espaco => espaco.alugado));
+          setEspacosDisponiveis(data.filter((espaco) => !espaco.alugado));
+          setEspacosAlugados(data.filter((espaco) => espaco.alugado));
         } catch (error) {
           alert("Erro ao carregar os espaços.");
         }
@@ -47,7 +47,7 @@ function MeusEspacos() {
     };
 
     try {
-      const response = await fetch("http://localhost:3333/spaces", {
+      const response = await fetch("https://localhost:3333/spaces", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newEspaco),
@@ -83,13 +83,14 @@ function MeusEspacos() {
 
   return (
     <div className="meus-espacos-container">
-      <h2>Meus Espaços</h2>
-
+      <h2> Meus Espaços </h2>
       <div className="secoes">
-        {/* Seção de espaços alugados */}
+        {" "}
+        {/* Seção de espaços alugados */}{" "}
         <div className="espacos-alugados">
-          <h3>Meus Espaços Alugados</h3>
+          <h3> Meus Espaços Alugados </h3>{" "}
           <div className="espacos-lista">
+            {" "}
             {espacosAlugados.length > 0 ? (
               espacosAlugados.map((espaco) => (
                 <div key={espaco.id} className="espaco-card">
@@ -98,24 +99,23 @@ function MeusEspacos() {
                     alt={espaco.nome}
                     className="espaco-imagem"
                   />
-                  <h4>{espaco.nome}</h4>
-                  <p>{espaco.descricao}</p>
-                  <p>Preço: R$ {espaco.preco}</p>
+                  <h4> {espaco.nome} </h4> <p> {espaco.descricao} </p>{" "}
+                  <p> Preço: R$ {espaco.preco} </p>{" "}
                   <button className="alugar-btn" disabled>
-                    Alugado
-                  </button>
+                    Alugado{" "}
+                  </button>{" "}
                 </div>
               ))
             ) : (
-              <p>Você não alugou nenhum espaço ainda.</p>
-            )}
-          </div>
+              <p> Você não alugou nenhum espaço ainda. </p>
+            )}{" "}
+          </div>{" "}
         </div>
-
-        {/* Seção de espaços para alugar */}
+        {/* Seção de espaços para alugar */}{" "}
         <div className="espacos-para-alugar">
-          <h3>Meus Espaços para Alugar</h3>
+          <h3> Meus Espaços para Alugar </h3>{" "}
           <div className="espacos-lista">
+            {" "}
             {espacosDisponiveis.length > 0 ? (
               espacosDisponiveis.map((espaco) => (
                 <div key={espaco.id} className="espaco-card">
@@ -124,33 +124,31 @@ function MeusEspacos() {
                     alt={espaco.nome}
                     className="espaco-imagem"
                   />
-                  <h4>{espaco.nome}</h4>
-                  <p>{espaco.descricao}</p>
-                  <p>Preço: R$ {espaco.preco}</p>
-                  <button className="alugar-btn">Alugar</button>
+                  <h4> {espaco.nome} </h4> <p> {espaco.descricao} </p>{" "}
+                  <p> Preço: R$ {espaco.preco} </p>{" "}
+                  <button className="alugar-btn"> Alugar </button>{" "}
                 </div>
               ))
             ) : (
-              <p>Você não tem espaços disponíveis para alugar.</p>
-            )}
-          </div>
-        </div>
+              <p> Você não tem espaços disponíveis para alugar. </p>
+            )}{" "}
+          </div>{" "}
+        </div>{" "}
       </div>
-
-      {/* Botão para mostrar/esconder o formulário */}
+      {/* Botão para mostrar/esconder o formulário */}{" "}
       <div className="botao-cadastrar">
         <button onClick={toggleFormVisibility} className="cadastrar-btn">
-          {formVisible ? "Fechar Formulário" : "Cadastrar Novo Espaço"}
-        </button>
+          {" "}
+          {formVisible ? "Fechar Formulário" : "Cadastrar Novo Espaço"}{" "}
+        </button>{" "}
       </div>
-
-      {/* Formulário de cadastro de espaço (visível quando formVisible for true) */}
+      {/* Formulário de cadastro de espaço (visível quando formVisible for true) */}{" "}
       {formVisible && (
         <div className="cadastrar-espaco">
-          <h3>Cadastrar Espaço para Alugar</h3>
+          <h3> Cadastrar Espaço para Alugar </h3>{" "}
           <form onSubmit={handleCadastrarEspaco}>
             <div className="input-group">
-              <label htmlFor="nome">Nome do Espaço</label>
+              <label htmlFor="nome"> Nome do Espaço </label>{" "}
               <input
                 type="text"
                 id="nome"
@@ -159,9 +157,8 @@ function MeusEspacos() {
                 required
               />
             </div>
-
             <div className="input-group">
-              <label htmlFor="descricao">Descrição</label>
+              <label htmlFor="descricao"> Descrição </label>{" "}
               <textarea
                 id="descricao"
                 value={descricaoEspaco}
@@ -169,9 +166,8 @@ function MeusEspacos() {
                 required
               />
             </div>
-
             <div className="input-group">
-              <label htmlFor="preco">Preço</label>
+              <label htmlFor="preco"> Preço </label>{" "}
               <input
                 type="number"
                 id="preco"
@@ -180,15 +176,14 @@ function MeusEspacos() {
                 required
               />
             </div>
-
             <div className="input-group">
-              <label htmlFor="foto">Foto do Espaço</label>
+              <label htmlFor="foto"> Foto do Espaço </label>{" "}
               <input
                 type="file"
                 id="foto"
                 accept="image/*"
                 onChange={handleFileChange}
-              />
+              />{" "}
               {fotoEspaco && (
                 <div className="foto-preview">
                   <img
@@ -197,15 +192,14 @@ function MeusEspacos() {
                     className="foto-preview-imagem"
                   />
                 </div>
-              )}
+              )}{" "}
             </div>
-
             <button type="submit" className="cadastrar-btn">
-              Cadastrar Espaço
-            </button>
-          </form>
+              Cadastrar Espaço{" "}
+            </button>{" "}
+          </form>{" "}
         </div>
-      )}
+      )}{" "}
     </div>
   );
 }
