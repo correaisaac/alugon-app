@@ -12,7 +12,7 @@ function SpaceDetail() {
   // Função para buscar os detalhes do espaço
   const fetchSpaceDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:3333/spaces/${id}`);
+      const response = await fetch(`https://localhost:3333/spaces/${id}`);
       const data = await response.json();
       setSpace(data); // Atualiza o estado com os dados do espaço
     } catch (error) {

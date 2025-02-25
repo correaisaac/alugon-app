@@ -1,0 +1,60 @@
+.pagamento-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .pagamento-container h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .pagamento-info {
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    text-align: left;
+  }
+  
+  .pagamento-info p {
+    margin: 5px 0;
+    font-size: 16px;
+  }
+  
+  .pagamento-label {
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
+  }
+  
+  .pagamento-select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  .pagamento-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: #4caf50;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .pagamento-btn:hover {
+    background: #45a049;
+  }
+  

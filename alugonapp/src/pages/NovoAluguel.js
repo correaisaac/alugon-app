@@ -12,6 +12,7 @@ function NovoAluguel() {
     data_fim: "",
     valor_total: "",
     contrato_id: "",
+    status: "",
     observacao: "",
     modelo_pagamento: "diário", // Modelo de pagamento inicial
   });
@@ -21,7 +22,7 @@ function NovoAluguel() {
   // Função para buscar os detalhes do espaço
   const fetchSpaceDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:3333/spaces/${id}`);
+      const response = await fetch(`https://localhost:3333/spaces/${id}`);
       const data = await response.json();
       setSpace(data);
       setRentalData((prevState) => ({
@@ -36,7 +37,7 @@ function NovoAluguel() {
   // Função para buscar os contratos existentes
   const fetchContracts = async () => {
     try {
-      const response = await fetch("http://localhost:3333/contracts");
+      const response = await fetch("https://localhost:3333/contracts");
       const data = await response.json();
       setContracts(data);
     } catch (error) {
@@ -126,7 +127,7 @@ const handleSubmit = async (e) => {
   
     try {
       // Criação do aluguel
-      const response = await fetch("http://localhost:3333/rentals", {
+      const response = await fetch("https://localhost:3333/rentals", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -137,6 +138,7 @@ const handleSubmit = async (e) => {
           espaco_id: id,
           locador: space.responsavel,
           locatario: user.id,
+          status: "pendente",
         }),
       });
   
@@ -144,7 +146,7 @@ const handleSubmit = async (e) => {
         alert("Aluguel realizado com sucesso!");
   
         // Atualizar o status do espaço para indisponível
-        await fetch(`http://localhost:3333/spaces/${id}`, {
+        await fetch(`https://localhost:3333/spaces/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -249,7 +251,7 @@ const handleSubmit = async (e) => {
         </div>
 
         <div className="form-group">
-          <button type="submit" className="submit-button">Confirmar Aluguel</button>
+          <button type="submit" className="submit-button">Solicitar Aluguel</button>
         </div>
       </form>
     </div>

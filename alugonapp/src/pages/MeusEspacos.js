@@ -3,12 +3,17 @@ import { useAuth } from "../context/AuthContext"; // Importando o contexto de au
 import { useNavigate } from "react-router-dom"; // Importando o hook para redirecionamento
 import "./MeusEspacos.css";
 
+function formatDate(isoDate) {
+  if (!isoDate) return "";
+  return new Date(isoDate).toLocaleDateString("pt-BR", { timeZone: "UTC" });
+}
+
 function MeusEspacos() {
   const { user, token } = useAuth(); // Obtendo os dados de autenticação do contexto
   const navigate = useNavigate(); // Hook de navegação
 
-  const [espacosDisponiveis, setEspacosDisponiveis] = useState([]);
-  const [espacosAlugados, setEspacosAlugados] = useState([]);
+  const [espaco, setMeusEspacos] = useState([]);
+  const [alugueisPendentes, setAlugueisPendentes] = useState([]);
   const [nomeEspaco, setNomeEspaco] = useState("");
   const [descricaoEspaco, setDescricaoEspaco] = useState("");
   const [precoEspaco, setPrecoEspaco] = useState("");
@@ -23,15 +28,24 @@ function MeusEspacos() {
       // Buscar espaços disponíveis e alugados
       const fetchEspacos = async () => {
         try {
-          const response = await fetch("http://localhost:3333/spaces");
+          const response = await fetch(`https://localhost:3333/spaces/user/${user.id}`);
           const data = await response.json();
-          setEspacosDisponiveis(data.filter(espaco => !espaco.alugado));
-          setEspacosAlugados(data.filter(espaco => espaco.alugado));
+          setMeusEspacos(data.filter(espaco => espaco));
         } catch (error) {
           alert("Erro ao carregar os espaços.");
         }
       };
       fetchEspacos();
+      const fetchAlugueis = async () => {
+        try {
+          const response = await fetch(`https://localhost:3333/rentals/tenant/${user.id}`);
+          const data = await response.json();
+          setAlugueisPendentes(data.filter(aluguel => aluguel));
+        } catch (error) {
+          alert("Erro ao carregar os aluguéis.");
+        }
+      };
+      fetchAlugueis();
     }
   }, [user, token, navigate]);
 
@@ -47,7 +61,7 @@ function MeusEspacos() {
     };
 
     try {
-      const response = await fetch("http://localhost:3333/spaces", {
+      const response = await fetch("https://localhost:3333/spaces", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newEspaco),
@@ -88,124 +102,55 @@ function MeusEspacos() {
       <div className="secoes">
         {/* Seção de espaços alugados */}
         <div className="espacos-alugados">
-          <h3>Meus Espaços Alugados</h3>
+          <h3>Soliciatações de Aluguel</h3>
           <div className="espacos-lista">
-            {espacosAlugados.length > 0 ? (
-              espacosAlugados.map((espaco) => (
-                <div key={espaco.id} className="espaco-card">
-                  <img
-                    src={espaco.foto}
-                    alt={espaco.nome}
-                    className="espaco-imagem"
-                  />
-                  <h4>{espaco.nome}</h4>
-                  <p>{espaco.descricao}</p>
-                  <p>Preço: R$ {espaco.preco}</p>
-                  <button className="alugar-btn" disabled>
-                    Alugado
-                  </button>
-                </div>
-              ))
-            ) : (
-              <p>Você não alugou nenhum espaço ainda.</p>
-            )}
+          {alugueisPendentes.length > 0 ? (
+            alugueisPendentes.map((aluguel) => (
+              <div key={aluguel.id} className="espaco-card">
+                <h4>Locatário: {aluguel.locatario}</h4>
+                <p>Locador: {aluguel.locador}</p>
+                <p>Espaço ID: {aluguel.espaco_id}</p>
+                <p>Data de Início: {formatDate(aluguel.data_inicio)}</p>
+                <p>Data de Fim: {formatDate(aluguel.data_fim)}</p>
+                <p>Valor Total: R$ {aluguel.valor_total}</p>
+                <p>Status: {aluguel.status}</p>
+                {aluguel.observacao && <p>Observação: {aluguel.observacao}</p>}
+                {aluguel.contrato_id && <p>Contrato ID: {aluguel.contrato_id}</p>}
+                <button className="alugar-btn">Alugar</button>
+              </div>
+            ))
+          ) : (
+            <p>Nenhum aluguel pendente.</p>
+          )}
           </div>
         </div>
 
-        {/* Seção de espaços para alugar */}
-        <div className="espacos-para-alugar">
-          <h3>Meus Espaços para Alugar</h3>
-          <div className="espacos-lista">
-            {espacosDisponiveis.length > 0 ? (
-              espacosDisponiveis.map((espaco) => (
-                <div key={espaco.id} className="espaco-card">
-                  <img
-                    src={espaco.foto}
-                    alt={espaco.nome}
-                    className="espaco-imagem"
-                  />
-                  <h4>{espaco.nome}</h4>
-                  <p>{espaco.descricao}</p>
-                  <p>Preço: R$ {espaco.preco}</p>
-                  <button className="alugar-btn">Alugar</button>
-                </div>
-              ))
-            ) : (
-              <p>Você não tem espaços disponíveis para alugar.</p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Botão para mostrar/esconder o formulário */}
-      <div className="botao-cadastrar">
-        <button onClick={toggleFormVisibility} className="cadastrar-btn">
-          {formVisible ? "Fechar Formulário" : "Cadastrar Novo Espaço"}
-        </button>
-      </div>
-
-      {/* Formulário de cadastro de espaço (visível quando formVisible for true) */}
-      {formVisible && (
-        <div className="cadastrar-espaco">
-          <h3>Cadastrar Espaço para Alugar</h3>
-          <form onSubmit={handleCadastrarEspaco}>
-            <div className="input-group">
-              <label htmlFor="nome">Nome do Espaço</label>
-              <input
-                type="text"
-                id="nome"
-                value={nomeEspaco}
-                onChange={(e) => setNomeEspaco(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="input-group">
-              <label htmlFor="descricao">Descrição</label>
-              <textarea
-                id="descricao"
-                value={descricaoEspaco}
-                onChange={(e) => setDescricaoEspaco(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="input-group">
-              <label htmlFor="preco">Preço</label>
-              <input
-                type="number"
-                id="preco"
-                value={precoEspaco}
-                onChange={(e) => setPrecoEspaco(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="input-group">
-              <label htmlFor="foto">Foto do Espaço</label>
-              <input
-                type="file"
-                id="foto"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              {fotoEspaco && (
-                <div className="foto-preview">
-                  <img
-                    src={fotoEspaco}
-                    alt="Foto do espaço"
-                    className="foto-preview-imagem"
-                  />
-                </div>
+          {/* Seção de espaços para alugar */}
+          <div className="espacos-para-alugar">
+            <h3>Meus Espaços para Alugar</h3>
+            <div className="espacos-lista">
+              {espaco.length > 0 ? (
+                espaco.map((espaco) => (
+                  <div key={espaco.id} className="espaco-card">
+                    <img
+                      src={espaco.imagem ? `data:image/jpeg;base64,${espaco.imagem}` : 'default-image.jpg'} 
+                      alt={`Imagem de ${espaco.nome}`}
+                      className="space-photo"
+                    />
+                    <h4>Número: {espaco.numero}</h4>
+                    <p>Disponível: {espaco.disponivel ? "Sim" : "Não"}</p>
+                    <p>Descrição: {espaco.descricao}</p>
+                    <p>Valor: R$ {espaco.valor}</p>
+                    <p>Endereço: {espaco.bairro} - {espaco.cidade}</p>
+                  </div>
+                ))
+              ) : (
+                <p>Você não cadastrou nenhum espaço.</p>
               )}
             </div>
 
-            <button type="submit" className="cadastrar-btn">
-              Cadastrar Espaço
-            </button>
-          </form>
         </div>
-      )}
+      </div>
     </div>
   );
 }

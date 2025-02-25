@@ -10,6 +10,7 @@ function Header() {
     ? [
         { to: "/", label: "Home" },
         { to: "/espacos", label: "Meus Espaços" },
+        { to: "/faturas", label: "Faturas" },
         { to: "/perfil", label: "Perfil" },
       ]
     : [

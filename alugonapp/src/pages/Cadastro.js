@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Importar useNavigate
 import "./Cadastro.css"; 
 
 function Cadastro() {
@@ -11,6 +11,9 @@ function Cadastro() {
   const [cpf, setCpf] = useState("");
   const [telefone, setTelefone] = useState("");
   const [fotoPerfil, setFotoPerfil] = useState(null); // Novo estado para a foto
+  const [conta, setConta] = useState(""); // Novo estado para a conta
+  const [agencia, setAgencia] = useState(""); // Novo estado para a agência
+  const navigate = useNavigate(); // Definir o hook de navegação
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -35,7 +38,7 @@ function Cadastro() {
       }
 
       const enviarDados = async () => {
-        const response = await fetch("http://localhost:3333/users", {
+        const response = await fetch("https://localhost:3333/users", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -46,6 +49,8 @@ function Cadastro() {
             email, 
             senha,
             foto: fotoBase64, // Envia a foto como base64
+            conta, // Envia a conta
+            agencia, // Envia a agência
           }),        
         });
 
@@ -53,6 +58,7 @@ function Cadastro() {
 
         if (response.ok) {
           alert("Cadastro bem-sucedido!");
+          navigate("/login"); 
         } else {
           alert("Erro ao cadastrar: " + data.message);
         }
@@ -123,6 +129,30 @@ function Cadastro() {
             placeholder="Digite seu telefone"
             value={telefone}
             onChange={(e) => setTelefone(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="conta">Número da Conta</label>
+          <input
+            type="text"
+            id="conta"
+            placeholder="Digite o número da sua conta"
+            value={conta}
+            onChange={(e) => setConta(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="agencia">Número da Agência</label>
+          <input
+            type="text"
+            id="agencia"
+            placeholder="Digite o número da sua agência"
+            value={agencia}
+            onChange={(e) => setAgencia(e.target.value)}
             required
           />
         </div>

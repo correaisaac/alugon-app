@@ -10,6 +10,8 @@ import Footer from './pages/Footer';
 import Perfil from './pages/Perfil';
 import MeusEspacos from './pages/MeusEspacos';
 import NovoAluguel from './pages/NovoAluguel';
+import Faturas from './pages/Faturas';
+import Pagamento from './pages/Pagamento';
 
 function App() {
   return (
@@ -23,7 +25,9 @@ function App() {
           <Route path="/espacos" element={<MeusEspacos />} />
           <Route path="/space/:id" element={<SpaceDetail />} /> 
           <Route path="/perfil" element={<Perfil />} /> 
+          <Route path="/faturas" element={<Faturas />} /> 
           <Route path="/novo-aluguel/:id" element={<NovoAluguel />} /> {/* Rota para novo aluguel */}
+          <Route path="/pagamento/:id" element={<Pagamento />} />
         </Routes>
         <Footer />
       </Router>

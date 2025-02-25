@@ -26,6 +26,8 @@ function Perfil() {
         <p><strong>Nome:</strong> {user.nome}</p>
         <p><strong>CPF:</strong> {user.CPF}</p>
         <p><strong>Data de Nascimento:</strong> {formatDate(user.data_nascimento)}</p>
+        <p><strong>Conta:</strong> {user.conta}</p>
+        <p><strong>Agência:</strong> {user.agencia}</p>
         <button className="logout-button" onClick={logout}>Sair</button>
       </div>
     </div>

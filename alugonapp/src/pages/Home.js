@@ -9,7 +9,7 @@ function Home() {
   // Função para buscar espaços
   const fetchSpaces = async () => {
     try {
-      const response = await fetch("http://localhost:3333/spaces");
+      const response = await fetch("https://localhost:3333/spaces");
       const data = await response.json();
       setSpaces(data); // Atualiza o estado com os espaços recebidos da API
     } catch (error) {
