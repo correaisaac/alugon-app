@@ -62,6 +62,7 @@ function MeusEspacos() {
 
     try {
       const response = await fetch("https://localhost:3333/spaces", {
+      const response = await fetch("https://localhost:3333/spaces", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newEspaco),
@@ -97,10 +98,10 @@ function MeusEspacos() {
 
   return (
     <div className="meus-espacos-container">
-      <h2>Meus Espaços</h2>
-
+      <h2> Meus Espaços </h2>
       <div className="secoes">
-        {/* Seção de espaços alugados */}
+        {" "}
+        {/* Seção de espaços alugados */}{" "}
         <div className="espacos-alugados">
           <h3>Soliciatações de Aluguel</h3>
           <div className="espacos-lista">
