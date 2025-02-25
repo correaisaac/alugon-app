@@ -43,30 +43,57 @@ function SpaceDetail() {
   };
 
   if (!space) {
-    return <p>Carregando detalhes do espaço...</p>;
+    return <p> Carregando detalhes do espaço... </p>;
   }
 
   return (
     <div className="space-detail-container">
-      <h2>Detalhes do Espaço {space.numero}</h2>
-      <strong><img src={space.imagem} alt="Imagem do espaço" className="space-image"/></strong> 
-      <p><strong>Descrição:</strong> {space.descricao}</p>
-      <p><strong>Responsável:</strong> {space.responsavel_nome}</p>
-      <p><strong>Valor:</strong> R${space.valor}</p>
-      <p><strong>Disponibilidade:</strong> {space.disponivel ? "Disponível" : "Indisponível"}</p>
-      <p><strong>Bairro: </strong> {space.bairro}</p>
-      <p><strong>Cidade:</strong> {space.cidade}</p>
-
-      {/* Botão de Alugar */}
+      <h2> Detalhes do Espaço {space.numero} </h2>{" "}
+      <strong>
+        {" "}
+        <img
+          src={space.imagem}
+          alt="Imagem do espaço"
+          className="space-image"
+        />{" "}
+      </strong>{" "}
+      <p>
+        {" "}
+        <strong> Descrição: </strong> {space.descricao}
+      </p>
+      <p>
+        {" "}
+        <strong> Responsável: </strong> {space.responsavel_nome}
+      </p>
+      <p>
+        {" "}
+        <strong> Valor: </strong> R${space.valor}
+      </p>
+      <p>
+        {" "}
+        <strong> Disponibilidade: </strong>{" "}
+        {space.disponivel ? "Disponível" : "Indisponível"}
+      </p>
+      <p>
+        {" "}
+        <strong> Bairro: </strong> {space.bairro}
+      </p>
+      <p>
+        {" "}
+        <strong> Cidade: </strong> {space.cidade}
+      </p>
+      {/* Botão de Alugar */}{" "}
       {space.disponivel && user && token && (
         <button onClick={handleAlugarClick} className="alugar-button">
-          Alugar
+          Alugar{" "}
         </button>
       )}
-
       {!user && !token && (
-        <p><em>Você precisa estar logado para alugar este espaço.</em></p>
-      )}
+        <p>
+          {" "}
+          <em> Você precisa estar logado para alugar este espaço. </em>
+        </p>
+      )}{" "}
     </div>
   );
 }
