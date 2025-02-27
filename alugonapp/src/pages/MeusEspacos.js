@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext"; // Importando o contexto de autenticação
-import { useNavigate } from "react-router-dom"; // Importando o hook para redirecionamento
+import { useAuth } from "../context/AuthContext"; 
+import { useNavigate } from "react-router-dom"; 
 import "./MeusEspacos.css";
 
 function formatDate(isoDate) {
@@ -9,8 +9,8 @@ function formatDate(isoDate) {
 }
 
 function MeusEspacos() {
-  const { user, token } = useAuth(); // Obtendo os dados de autenticação do contexto
-  const navigate = useNavigate(); // Hook de navegação
+  const { user, token } = useAuth(); 
+  const navigate = useNavigate(); 
 
   const [espaco, setMeusEspacos] = useState([]);
   const [alugueisPendentes, setAlugueisPendentes] = useState([]);
@@ -19,13 +19,12 @@ function MeusEspacos() {
   const [precoEspaco, setPrecoEspaco] = useState("");
   const [fotoEspaco, setFotoEspaco] = useState(null);
   const [formVisible, setFormVisible] = useState(false);
+  const [mostrarBotao, setMostrarBotao] = useState(true); 
 
-  // Se o usuário não estiver logado, redireciona para o login
   useEffect(() => {
     if (!user || !token) {
-      navigate("/login"); // Redireciona para o login se não estiver logado
+      navigate("/login"); 
     } else {
-      // Buscar espaços disponíveis e alugados
       const fetchEspacos = async () => {
         try {
           const response = await fetch(`https://localhost:3333/spaces/user/${user.id}`);
@@ -36,9 +35,10 @@ function MeusEspacos() {
         }
       };
       fetchEspacos();
+
       const fetchAlugueis = async () => {
         try {
-          const response = await fetch(`https://localhost:3333/rentals/tenant/${user.id}`);
+          const response = await fetch(`https://localhost:3333/rentals/owner/${user.id}`);
           const data = await response.json();
           setAlugueisPendentes(data.filter(aluguel => aluguel));
         } catch (error) {
@@ -49,25 +49,15 @@ function MeusEspacos() {
     }
   }, [user, token, navigate]);
 
-  // Enviar o espaço para o backend
   const handleCadastrarEspaco = async (event) => {
     event.preventDefault();
-
-    const newEspaco = {
-      nome: nomeEspaco,
-      descricao: descricaoEspaco,
-      preco: precoEspaco,
-      foto: fotoEspaco,
-    };
-
+    const newEspaco = { nome: nomeEspaco, descricao: descricaoEspaco, preco: precoEspaco, foto: fotoEspaco };
     try {
-      const response = await fetch("https://localhost:3333/spaces", {
       const response = await fetch("https://localhost:3333/spaces", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newEspaco),
       });
-
       const data = await response.json();
       if (response.ok) {
         alert("Espaço cadastrado com sucesso!");
@@ -83,73 +73,139 @@ function MeusEspacos() {
     }
   };
 
-  // Para o campo de foto do espaço
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFotoEspaco(URL.createObjectURL(file)); // Exibe a imagem localmente
+  const handleExcluirAluguel = async (aluguelId) => {
+    try {
+      const response = await fetch(`https://localhost:3333/rentals/${aluguelId}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        alert("Aluguel excluído com sucesso!");
+        setAlugueisPendentes(alugueisPendentes.filter(aluguel => aluguel.id !== aluguelId));
+      } else {
+        alert("Erro ao excluir aluguel.");
+      }
+    } catch (error) {
+      alert("Erro ao conectar ao servidor.");
     }
   };
 
-  // Controla a exibição do formulário
+  const handleAceitarAluguel = async (aluguel) => {
+    try {
+      const response = await fetch(`https://localhost:3333/rentals/${aluguel.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...aluguel,
+          status: "aprovado",
+        }),
+      });
+  
+      if (response.ok) {
+        alert("Aluguel aceito com sucesso");
+  
+        // Atualiza o estado removendo o aluguel aceito da lista de pendentes
+        setAlugueisPendentes((prevAlugueis) =>
+          prevAlugueis.map((a) =>
+            a.id === aluguel.id ? { ...a, status: "aprovado" } : a
+          )
+        );
+      } else {
+        alert("Erro ao aceitar o aluguel.");
+      }
+    } catch (error) {
+      alert("Erro ao conectar ao servidor.");
+    }
+  };
+  
+  const handleExcluirEspaco = async (espacoId) => {
+    try {
+      const response = await fetch(`https://localhost:3333/spaces/${espacoId}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        alert("Espaço excluído com sucesso!");
+        setMeusEspacos(espaco.filter((espaco) => espaco.id !== espacoId));
+      } else {
+        alert("Você não pode excluir este espaço.");
+      }
+    } catch (error) {
+      alert("Erro");
+    }
+  };
+
+  const handleEditarEspaco = (espaco) => {
+    navigate(`/novo-espaco/${espaco.id}`);
+  };
+
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFotoEspaco(URL.createObjectURL(file));
+    }
+  };
+
   const toggleFormVisibility = () => {
     setFormVisible(!formVisible);
   };
 
   return (
     <div className="meus-espacos-container">
-      <h2> Meus Espaços </h2>
+      <h2>Meus Espaços</h2>
+      <button className="novo-espaco-btn" onClick={() => navigate("/novo-espaco")}>Novo Espaço</button>
       <div className="secoes">
-        {" "}
-        {/* Seção de espaços alugados */}{" "}
         <div className="espacos-alugados">
-          <h3>Soliciatações de Aluguel</h3>
+          <h3>Aluguéis</h3>
           <div className="espacos-lista">
-          {alugueisPendentes.length > 0 ? (
-            alugueisPendentes.map((aluguel) => (
-              <div key={aluguel.id} className="espaco-card">
-                <h4>Locatário: {aluguel.locatario}</h4>
-                <p>Locador: {aluguel.locador}</p>
-                <p>Espaço ID: {aluguel.espaco_id}</p>
-                <p>Data de Início: {formatDate(aluguel.data_inicio)}</p>
-                <p>Data de Fim: {formatDate(aluguel.data_fim)}</p>
-                <p>Valor Total: R$ {aluguel.valor_total}</p>
-                <p>Status: {aluguel.status}</p>
-                {aluguel.observacao && <p>Observação: {aluguel.observacao}</p>}
-                {aluguel.contrato_id && <p>Contrato ID: {aluguel.contrato_id}</p>}
-                <button className="alugar-btn">Alugar</button>
-              </div>
-            ))
-          ) : (
-            <p>Nenhum aluguel pendente.</p>
-          )}
+            {alugueisPendentes.length > 0 ? (
+              alugueisPendentes.map((aluguel) => (
+                <div key={aluguel.id} className="espaco-card">
+                  <h4>Locatário: {aluguel.locatario}</h4>
+                  <p>Locador: {aluguel.locador}</p>
+                  <p>Espaço ID: {aluguel.espaco_id}</p>
+                  <p>Data de Início: {formatDate(aluguel.data_inicio)}</p>
+                  <p>Data de Fim: {formatDate(aluguel.data_fim)}</p>
+                  <p>Valor Total: R$ {aluguel.valor_total}</p>
+                  <p>Status: {aluguel.status}</p>
+                  {aluguel.observacao && <p>Observação: {aluguel.observacao}</p>}
+                  {aluguel.contrato_id && <p>Contrato ID: {aluguel.contrato_id}</p>}
+                  {aluguel.status !== 'aprovado' && (
+  <button className="editar-btn" onClick={() => handleAceitarAluguel(aluguel)}>
+    Aceitar
+  </button>
+)}                <button className="excluir-btn" onClick={() => handleExcluirAluguel(aluguel.id)}>Excluir</button>
+                </div>
+              ))
+            ) : (
+              <p>Nenhum aluguel pendente.</p>
+            )}
           </div>
         </div>
 
-          {/* Seção de espaços para alugar */}
-          <div className="espacos-para-alugar">
-            <h3>Meus Espaços para Alugar</h3>
-            <div className="espacos-lista">
-              {espaco.length > 0 ? (
-                espaco.map((espaco) => (
-                  <div key={espaco.id} className="espaco-card">
-                    <img
-                      src={espaco.imagem ? `data:image/jpeg;base64,${espaco.imagem}` : 'default-image.jpg'} 
-                      alt={`Imagem de ${espaco.nome}`}
-                      className="space-photo"
-                    />
-                    <h4>Número: {espaco.numero}</h4>
-                    <p>Disponível: {espaco.disponivel ? "Sim" : "Não"}</p>
-                    <p>Descrição: {espaco.descricao}</p>
-                    <p>Valor: R$ {espaco.valor}</p>
-                    <p>Endereço: {espaco.bairro} - {espaco.cidade}</p>
-                  </div>
-                ))
-              ) : (
-                <p>Você não cadastrou nenhum espaço.</p>
-              )}
-            </div>
-
+        <div className="espacos-para-alugar">
+          <h3>Meus Espaços para Alugar</h3>
+          <div className="espacos-lista">
+            {espaco.length > 0 ? (
+              espaco.map((espaco) => (
+                <div key={espaco.id} className="espaco-card">
+                  <img
+                    src={espaco.imagem ? `data:image/jpeg;base64,${espaco.imagem}` : 'default-image.jpg'} 
+                    alt={`Imagem de ${espaco.nome}`}
+                    className="space-photo"
+                  />
+                  <h4>Número: {espaco.numero}</h4>
+                  <p>Disponível: {espaco.disponivel ? "Sim" : "Não"}</p>
+                  <p>Descrição: {espaco.descricao}</p>
+                  <p>Valor: R$ {espaco.valor}</p>
+                  <p>Endereço: {espaco.bairro} - {espaco.cidade}</p>
+                  <button className="editar-btn" onClick={() => handleEditarEspaco(espaco)}>Editar</button>
+                  <button className="excluir-btn" onClick={() => handleExcluirEspaco(espaco.id)}>Excluir</button>
+                </div>
+              ))
+            ) : (
+              <p>Você não cadastrou nenhum espaço ou seus espaços estão alugados</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

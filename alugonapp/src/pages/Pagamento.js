@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Pagamento.css";
+import { useAuth } from "../context/AuthContext";
 
 function formatDate(isoDate) {
   if (!isoDate) return "";
   return new Date(isoDate).toLocaleDateString("pt-BR", { timeZone: "UTC" });
 }
 
+// Função para gerar um código de validação seguro
+function generateValidationCode(faturaId) {
+  return Math.random().toString(36).substring(2, 10).toUpperCase() + faturaId;
+}
+
 function Pagamento() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [fatura, setFatura] = useState(null);
-  const [formaPagamento, setFormaPagamento] = useState("Pix");
+  const [pagamento, setPagamento] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [paymentError, setPaymentError] = useState(null);
+  const [validationCode, setValidationCode] = useState("");
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFatura = async () => {
@@ -28,44 +35,99 @@ function Pagamento() {
     fetchFatura();
   }, [id]);
 
-  const handlePagamento = async () => {
+  const handleCriarPagamento = async () => {
+    if (!fatura) return;
+
     setLoading(true);
-    setPaymentError(null);
+    const generatedValidationCode = generateValidationCode(fatura.id);
 
     try {
-      const response = await fetch(`https://localhost:3333/payments`, {
+      const response = await fetch(`https://localhost:3333/payments`, { 
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          fatura_id: id,
-          forma_pagamento: formaPagamento,
+          fatura_id: fatura.id,
+          num_transacao: generatedValidationCode,
         }),
       });
 
       if (response.ok) {
-        const payment = await response.json();
-        
-        // Se o pagamento for com Cartão, faça o processamento necessário com o Stripe
-        if (formaPagamento === "Cartão") {
-          // Exemplo: Iniciar o processo de pagamento com o Stripe ou outro gateway
-          const { num_transacao } = payment;
-          
-          // Aqui você pode fazer a integração com o Stripe ou outro serviço de pagamento.
-          // Para simplificação, vamos apenas simular o pagamento bem-sucedido.
-          alert("Pagamento realizado com sucesso!");
-          navigate("/faturas");
-        } else {
-          alert("Pagamento realizado com sucesso!");
-          navigate("/faturas");
-        }
+        const paymentData = await response.json();
+        setPagamento(paymentData);  // Armazena o ID do pagamento
+        alert("Pagamento criado com sucesso! Gere um boleto para prosseguir.");
+        fetchBoleto(paymentData.id);  // Buscar o boleto gerado
       } else {
-        alert(response.id);
-        setPaymentError("Erro ao processar o pagamento.");
+        alert("Erro ao criar pagamento.");
       }
     } catch (error) {
-      setPaymentError("Erro ao conectar com o servidor.");
+      alert("Erro ao conectar com o servidor.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleValidarPagamento = async () => {
+    if (!fatura || !pagamento) return;
+    try {
+      // Busca o pagamento no banco com base no ID do pagamento
+      const search = await fetch(`https://localhost:3333/payments/${pagamento.id}`);
+      
+      if (!search.ok) {
+        alert("Pagamento não encontrado.");
+        return;
+      }
+
+      const paymentData = await search.json(); // Transformando a resposta em objeto JSON
+      const validCode = paymentData.num_transacao; // Acessar o código de validação correto
+
+      // Comparar o código de validação inserido com o código do banco
+      if (validationCode === validCode) {
+        alert("Pagamento validado com sucesso!");
+        // Atualiza o status da fatura para "Pago"
+        await fetch(`https://localhost:3333/invoices/${fatura.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            aluguel_id: fatura.aluguel_id,
+            status: "Pago",
+            valor: fatura.valor,
+            data_emissaoao: fatura.data_emiss,
+            data_venc: fatura.data_venc,
+            descontos: fatura.descontos,
+            imposto: fatura.imposto,
+          }),
+        });
+
+        setFatura((prev) => ({ ...prev, status: "Pago" }));
+        navigate('/faturas');
+      } else {
+        alert("Código de validação inválido.");
+      }
+    } catch (error) {
+      alert("Erro ao conectar com o servidor.");
+    }
+  };
+
+  const fetchBoleto = async (paymentId) => {
+    try {
+      const response = await fetch(`https://localhost:3333/payments/${paymentId}`);
+      const paymentData = await response.json();
+      
+      if (paymentData.boleto_pdf) {
+        const blob = new Blob([new Uint8Array(atob(paymentData.boleto_pdf).split("").map(c => c.charCodeAt(0)))], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+        
+        // Abre o PDF em uma nova aba
+        window.open(url, '_blank');
+      } else {
+        alert("Boleto não encontrado.");
+      }
+    } catch (error) {
+      alert("Erro ao carregar o boleto.");
     }
   };
 
@@ -81,27 +143,24 @@ function Pagamento() {
         <p><strong>Status:</strong> {fatura.status}</p>
       </div>
 
-      <label className="pagamento-label">Forma de Pagamento:</label>
-      <select
-        className="pagamento-select"
-        value={formaPagamento}
-        onChange={(e) => setFormaPagamento(e.target.value)}
-      >
-        <option value="Pix">Pix</option>
-        <option value="Boleto">Boleto</option>
-        <option value="TED">TED</option>
-        <option value="Cartão">Cartão</option>
-      </select>
+      {fatura.status !== "Pago" && (
+        <button className="pagamento-btn" onClick={handleCriarPagamento} disabled={loading}>
+          {loading ? "Criando Pagamento..." : "Criar Pagamento"}
+        </button>
+      )}
 
-      <button
-        className="pagamento-btn"
-        onClick={handlePagamento}
-        disabled={loading}
-      >
-        {loading ? "Processando..." : "Confirmar Pagamento"}
-      </button>
-
-      {paymentError && <p className="error">{paymentError}</p>}
+      <div>
+        <h3>Validar Pagamento</h3>
+        <input
+          type="text"
+          value={validationCode}
+          onChange={(e) => setValidationCode(e.target.value)}
+          placeholder="Insira o código de validação"
+        />
+        <button className="pagamento-btn" onClick={handleValidarPagamento}>
+          Validar Pagamento
+        </button>
+      </div>
     </div>
   );
 }

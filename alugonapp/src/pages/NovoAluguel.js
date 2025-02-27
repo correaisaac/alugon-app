@@ -52,13 +52,10 @@ function NovoAluguel() {
 
   // Função para manipular os campos de formulário
   const handleChange = (e) => {
-    setRentalData(
-      {
-        ...rentalData,
-        [e.target.name]: e.target.value,
-      },
-      calculateTotalValue
-    ); // Chama o cálculo sempre que os dados mudam
+    setRentalData({
+      ...rentalData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   // Função para calcular o valor total baseado no modelo de pagamento e no tempo de aluguel
@@ -88,6 +85,10 @@ function NovoAluguel() {
     }));
   };
 
+  useEffect(() => {
+    calculateTotalValue();
+  }, [rentalData.data_inicio, rentalData.data_fim, rentalData.modelo_pagamento]);
+
   // Função para verificar se o contrato é compatível com o período
   const isContractValidForPeriod = (contract) => {
     if (!rentalData.data_inicio || !rentalData.data_fim) return false;
@@ -105,7 +106,6 @@ function NovoAluguel() {
     return false; // Se o contrato não for válido para o período
   };
 
-  // Função para submeter o formulário de novo aluguel
   // Função para submeter o formulário de novo aluguel
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -161,7 +161,7 @@ function NovoAluguel() {
         });
 
         // Redireciona para a página de detalhes do espaço após o aluguel
-        navigate(`/detalhes-espaco/${id}`);
+        navigate(`/space/${id}`);
       } else {
         alert("Erro ao realizar o aluguel. Tente novamente.");
       }
@@ -177,14 +177,13 @@ function NovoAluguel() {
 
   return (
     <div className="novo-aluguel-container">
-      <h2> Novo Aluguel - {space.nome} </h2>{" "}
+      <h2> Novo Aluguel - {space.nome} </h2>
       <p>
-        {" "}
         <strong> Valor por período: </strong> R${space.valor}
       </p>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="data_inicio"> Data de Início </label>{" "}
+          <label htmlFor="data_inicio"> Data de Início </label>
           <input
             type="datetime-local"
             id="data_inicio"
@@ -195,7 +194,7 @@ function NovoAluguel() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="data_fim"> Data de Fim </label>{" "}
+          <label htmlFor="data_fim"> Data de Fim </label>
           <input
             type="datetime-local"
             id="data_fim"
@@ -204,10 +203,10 @@ function NovoAluguel() {
             onChange={handleChange}
             required
             onBlur={calculateTotalValue} // Chama o cálculo quando o campo perde o foco
-          />{" "}
+          />
         </div>
         <div className="form-group">
-          <label htmlFor="contrato_id"> Selecione o Contrato </label>{" "}
+          <label htmlFor="contrato_id"> Selecione o Contrato </label>
           <select
             name="contrato_id"
             id="contrato_id"
@@ -215,7 +214,7 @@ function NovoAluguel() {
             onChange={handleChange}
             required
           >
-            <option value=""> Escolha um contrato </option>{" "}
+            <option value=""> Escolha um contrato </option>
             {contracts.map((contract) => {
               const validForPeriod = isContractValidForPeriod(contract);
               return (
@@ -224,24 +223,24 @@ function NovoAluguel() {
                   value={contract.id}
                   disabled={!validForPeriod} // Desabilita contratos incompatíveis
                 >
-                  {contract.modelo_pagamento} - {contract.condicoes_pagamento}{" "}
-                  {validForPeriod ? "" : " (Incompatível com o período)"}{" "}
+                  {contract.modelo_pagamento} - {contract.condicoes_pagamento}
+                  {validForPeriod ? "" : " (Incompatível com o período)"}
                 </option>
               );
-            })}{" "}
-          </select>{" "}
+            })}
+          </select>
         </div>
         <div className="form-group">
-          <label htmlFor="observacao"> Observações(opcional) </label>{" "}
+          <label htmlFor="observacao"> Observações(opcional) </label>
           <textarea
             id="observacao"
             name="observacao"
             value={rentalData.observacao}
             onChange={handleChange}
-          />{" "}
+          />
         </div>
         <div className="form-group">
-          <label htmlFor="valor_total"> Valor Total </label>{" "}
+          <label htmlFor="valor_total"> Valor Total </label>
           <input
             type="text"
             id="valor_total"
@@ -251,18 +250,9 @@ function NovoAluguel() {
           />
         </div>
         <div className="form-group">
-<<<<<<< HEAD
           <button type="submit" className="submit-button">Solicitar Aluguel</button>
         </div>
       </form>
-=======
-          <button type="submit" className="submit-button">
-            {" "}
-            Confirmar Aluguel{" "}
-          </button>{" "}
-        </div>{" "}
-      </form>{" "}
->>>>>>> 26a06f27758108f598c2d314671a7f7b64e548a0
     </div>
   );
 }

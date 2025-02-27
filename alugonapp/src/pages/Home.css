@@ -1,43 +1,68 @@
 .home-container {
-    padding: 20px;
-  }
-  
-  .featured-spaces h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-  
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.featured-spaces h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.space-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
+
+.space-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.3s, box-shadow 0.3s;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.space-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.space-card h3 {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+.space-card p {
+  font-size: 1rem;
+  margin: 5px 0;
+  color: #666;
+}
+
+.space-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
   .space-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
   }
   
   .space-card {
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    transition: transform 0.3s;
+    padding: 12px;
   }
-  
-  .space-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .space-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
-  
-  .space-card p {
-    font-size: 1rem;
-    margin: 5px 0;
-  }
-  
-  .space-image {
-    width: 300px; /* Defina um tamanho fixo */
-    height: auto; /* Mantém a proporção da imagem */
-    border-radius: 10px; /* (Opcional) Deixa as bordas arredondadas */
-  }
+}

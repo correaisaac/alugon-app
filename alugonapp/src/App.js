@@ -12,7 +12,7 @@ import MeusEspacos from './pages/MeusEspacos';
 import NovoAluguel from './pages/NovoAluguel';
 import Faturas from './pages/Faturas';
 import Pagamento from './pages/Pagamento';
-
+import NovoEspaco from './pages/NovoEspaco';
 function App() {
   return (
     <AuthProvider> 
@@ -28,6 +28,8 @@ function App() {
           <Route path="/faturas" element={<Faturas />} /> 
           <Route path="/novo-aluguel/:id" element={<NovoAluguel />} /> {/* Rota para novo aluguel */}
           <Route path="/pagamento/:id" element={<Pagamento />} />
+          <Route path="/novo-espaco" element={<NovoEspaco />}/>
+          <Route path="/novo-espaco/:id" element={<NovoEspaco />}/>
         </Routes>
         <Footer />
       </Router>

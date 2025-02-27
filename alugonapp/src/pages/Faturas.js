@@ -52,7 +52,6 @@ function Faturas() {
                 <td>{formatDate(fatura.data_venc)}</td>
                 <td>{fatura.status}</td>
                 <td>
-                  <button onClick={() => navigate(`/fatura/${fatura.id}`)}>Visualizar</button>
                   {fatura.status !== "Paga" && (
                     <button onClick={() => navigate(`/pagamento/${fatura.id}`)}>Pagar</button>
                   )}
