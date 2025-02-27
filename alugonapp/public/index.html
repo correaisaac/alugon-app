@@ -1,71 +1,21 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alugon</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css">
-</head>
-<body>
-    <header>
-        <nav>
-            <div class="logo">Alugon</div>
-            <button class="menu-toggle">&#9776;</button>
-            <ul class="nav-links">
-                <li><a href="#" class="active">Home</a></li>
-                <li><a href="#">Espaços</a></li>
-                <li><a href="#">Host</a></li>
-                <li><a href="#">Cadastrar</a></li>
-                <li><a href="#">Login</a></li>
-            </ul>
-        </nav>
-    
-        <!-- Menu lateral para mobile -->
-        <div class="mobile-menu">
-            <button class="close-menu">&times;</button>
-            <ul>
-                <li><a href="./index.html" class="active">Home</a></li>
-                <li><a href="./spaces.html">Espaços</a></li>
-                <li><a href="./hostshtml">Host</a></li>
-                <li><a href="/cadastro.html">Cadastrar</a></li>
-                <li><a href="./login.html">Login</a></li>
-            </ul>
-        </div>
-    </header>
-    
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
 
-    <main>
-        <section class="hero">
-            <h1 id="title">Encontre seu espaço perfeito</h1>
-            <div class="search-bar">
-                <input type="text" placeholder="Pra onde você está indo?">
-                <input type="date" placeholder="Check-in">
-                <input type="date" placeholder="Check-out">
-                <select>
-                    <option value="">Space Type</option>
-                    <option value="apartment">Apartamento</option>
-                    <option value="house">Casa</option>
-                    <option value="villa">Vila</option>
-                </select>
-                <input type="number" placeholder="Guests">
-                <button class="search-btn">Pesquisar</button>
-            </div>
-        </section>
+    <title>AlugON</title>
+  </head>
 
-        <section class="featured-spaces">
-            <h2>Espaços em destaque</h2>
-            <div class="space-grid">
-                <!-- Space cards will be dynamically inserted here -->
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Alugon. Todos os direitos reservados.</p>
-    </footer>
-
-    <script src="app.js"></script>
-</body>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
 </html>
 
