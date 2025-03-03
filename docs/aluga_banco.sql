@@ -33,8 +33,7 @@ CREATE TABLE IF NOT EXISTS `aluga_banco`.`usuario` (
   `foto` LONGBLOB NOT NULL,
   `conta` VARCHAR(10) NOT NULL,
   `agencia` VARCHAR(5) NOT NULL,
-  `ativo` TINYINT DEFAULT 1
-
+  `ativo` TINYINT DEFAULT 1,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
