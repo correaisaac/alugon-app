@@ -53,7 +53,7 @@ function Pagamento() {
       if (response.ok) {
         const paymentData = await response.json();
         setPagamento(paymentData); 
-        alert("Pagamento criado com sucesso! Gere um boleto para prosseguir.");
+        alert("gerando um boleto!");
         fetchBoleto(paymentData.id); 
       } else {
         alert("Erro ao criar pagamento.");
