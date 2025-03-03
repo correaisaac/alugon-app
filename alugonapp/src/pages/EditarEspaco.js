@@ -6,7 +6,7 @@ import "./NovoEspaco.css";
 function NovoEspaco() {
   const { user, token } = useAuth();
   const navigate = useNavigate();
-  const { id } = useParams(); // Pega o ID da URL, usado para editar um espaço
+  const { id } = useParams(); 
   const [espaco, setEspaco] = useState({
     numero: "",
     descricao: "",
@@ -70,14 +70,12 @@ function NovoEspaco() {
     try {
       let response;
       if (id) {
-        // Se estiver editando, fazemos uma PUT request
         response = await fetch(`https://localhost:3333/spaces/${id}`, {
           method: "PUT",
           headers: { "Authorization": `Bearer ${token}` },
           body: formData,
         });
       } else {
-        // Caso contrário, é um POST para criar um novo espaço
         response = await fetch("https://localhost:3333/spaces", {
           method: "POST",
           headers: { "Authorization": `Bearer ${token}` },

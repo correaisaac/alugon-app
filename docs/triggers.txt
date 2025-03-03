@@ -1,0 +1,95 @@
+--Trigger para atualizar os aluguéis vencidos:
+DELIMITER $$
+
+CREATE EVENT IF NOT EXISTS evento_atualizar_alugueis_vencidos
+ON SCHEDULE EVERY 1 DAY
+DO
+BEGIN
+    UPDATE aluguel 
+    SET encerrado = 1 
+    WHERE data_fim < NOW() AND encerrado = 0;
+END $$
+
+DELIMITER ;
+
+--Trigger para atualizar a disponibilidade dos espaços:
+DELIMITER $$
+
+CREATE TRIGGER atualizar_disponibilidade_espaco
+AFTER UPDATE ON aluguel
+FOR EACH ROW
+BEGIN
+        IF OLD.status = 'pendente' AND NEW.status = 'aprovado' THEN
+        UPDATE espaco 
+        SET disponivel = 0
+        WHERE id = NEW.espaco_id;
+    END IF;
+END $$
+
+DELIMITER ;
+
+
+--Trigger para atualizar o espaço de volta:
+DELIMITER $$
+
+CREATE TRIGGER atualizar_disponibilidade_espaco_encerrado
+AFTER UPDATE ON aluguel
+FOR EACH ROW
+BEGIN
+    -- Se o aluguel foi encerrado (encerrado = 1), tornar o espaço disponível
+    IF OLD.encerrado != 1 AND NEW.encerrado = 1 THEN
+        UPDATE espaco 
+        SET disponivel = 1
+        WHERE id = NEW.espaco_id;
+    END IF;
+END $$
+
+DELIMITER ;
+
+
+--Trigger para gerar as faturas:
+DELIMITER //
+
+CREATE TRIGGER gerar_fatura_apos_aluguel
+AFTER INSERT ON aluguel
+FOR EACH ROW
+BEGIN
+    DECLARE v_data_vencimento DATETIME;
+    DECLARE v_modelo_pagamento ENUM('diário', 'semanal', 'mensal', 'anual');
+
+       SELECT modelo_pagamento INTO v_modelo_pagamento
+    FROM contrato
+    WHERE id = NEW.contrato_id;
+
+    CASE v_modelo_pagamento
+        WHEN 'diário' THEN SET v_data_vencimento = DATE_ADD(NEW.data_inicio, INTERVAL 1 DAY);
+        WHEN 'semanal' THEN SET v_data_vencimento = DATE_ADD(NEW.data_inicio, INTERVAL 7 DAY);
+        WHEN 'mensal' THEN SET v_data_vencimento = DATE_ADD(NEW.data_inicio, INTERVAL 1 MONTH);
+        WHEN 'anual' THEN SET v_data_vencimento = DATE_ADD(NEW.data_inicio, INTERVAL 1 YEAR);
+        ELSE SET v_data_vencimento = DATE_ADD(NEW.data_inicio, INTERVAL 1 MONTH); -- Default: mensal
+    END CASE;
+
+    INSERT INTO fatura (valor, data_emissao, data_venc, status, descontos, imposto, aluguel_id)
+    VALUES (NEW.valor_total, NEW.data_inicio, v_data_vencimento, 'Pendente', 0.00, 0.00, NEW.id);
+END;
+
+//
+
+DELIMITER ;
+
+-- Atualiza os espaços quando usuario forem excluídos
+DELIMITER $$
+
+CREATE TRIGGER before_usuario_update
+BEFORE UPDATE ON usuario
+FOR EACH ROW
+BEGIN
+    IF OLD.ativo = 1 AND NEW.ativo = 0 THEN
+        UPDATE espaco
+        SET ativo = 0
+        WHERE responsavel = OLD.id;
+    END IF;
+END $$
+
+DELIMITER ;
+

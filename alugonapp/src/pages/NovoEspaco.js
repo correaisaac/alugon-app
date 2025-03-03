@@ -6,7 +6,7 @@ import "./NovoEspaco.css";
 function NovoEspaco() {
   const { user, token } = useAuth();
   const navigate = useNavigate();
-  const { id } = useParams(); // Pega o ID da URL, usado para editar um espaço
+  const { id } = useParams(); 
   const [espaco, setEspaco] = useState({
     numero: "",
     descricao: "",
@@ -48,20 +48,23 @@ function NovoEspaco() {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setFotoEspaco(URL.createObjectURL(file));
-      setEspaco((prevEspaco) => ({
-        ...prevEspaco,
-        imagem: fotoEspaco,
-      }));
+      const reader = new FileReader();
+      reader.readAsDataURL(file); 
+      reader.onloadend = () => {
+        setFotoEspaco(reader.result);
+        setEspaco((prevEspaco) => ({
+          ...prevEspaco,
+          imagem: reader.result, 
+        }));
+      };
     }
   };
-
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       let response;
       if (id) {
-        // Se estiver editando, fazemos uma PUT request
         response = await fetch(`https://localhost:3333/spaces/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json", 
@@ -89,7 +92,6 @@ function NovoEspaco() {
         if (espaco.imagem) {
         formData.append("imagem", espaco.imagem);
         }
-        // Caso contrário, é um POST para criar um novo espaço
         response = await fetch("https://localhost:3333/spaces", {
           method: "POST",
           headers: { "Content-Type": "application/json", 

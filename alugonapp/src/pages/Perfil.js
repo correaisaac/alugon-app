@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./Perfil.css";
 
@@ -9,9 +10,30 @@ function formatDate(isoDate) {
 
 function Perfil() {
   const { user, logout } = useAuth(); 
+
   if (!user) {
     return <p className="profile-data">Você precisa estar logado para acessar esta página.</p>;
   }
+
+  const handleDelete = async () => {
+    if (window.confirm("Tem certeza de que deseja excluir sua conta?")) {
+      try {
+        const response = await fetch(`https://localhost:3333/users/${user.id}`, {
+          method: "DELETE",
+        });
+
+        if (response.ok) {
+          alert("Conta excluída com sucesso!");
+          logout();  // Faz logout após a exclusão
+        } else {
+          const data = await response.json();
+          alert("Erro ao excluir conta: " + data.message);
+        }
+      } catch (error) {
+        alert("Erro ao conectar ao servidor.");
+      }
+    }
+  };
 
   return (
     <div className="profile-data">
@@ -28,7 +50,9 @@ function Perfil() {
         <p><strong>Data de Nascimento:</strong> {formatDate(user.data_nascimento)}</p>
         <p><strong>Conta:</strong> {user.conta}</p>
         <p><strong>Agência:</strong> {user.agencia}</p>
+        <Link to={`/editar-usuario/${user.id}`} className="edit-button">Editar Perfil</Link>
         <button className="logout-button" onClick={logout}>Sair</button>
+        <button className="delete-button" onClick={handleDelete}>Excluir Conta</button>
       </div>
     </div>
   );

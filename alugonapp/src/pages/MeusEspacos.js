@@ -14,12 +14,8 @@ function MeusEspacos() {
 
   const [espaco, setMeusEspacos] = useState([]);
   const [alugueisPendentes, setAlugueisPendentes] = useState([]);
-  const [nomeEspaco, setNomeEspaco] = useState("");
-  const [descricaoEspaco, setDescricaoEspaco] = useState("");
-  const [precoEspaco, setPrecoEspaco] = useState("");
-  const [fotoEspaco, setFotoEspaco] = useState(null);
-  const [formVisible, setFormVisible] = useState(false);
-  const [mostrarBotao, setMostrarBotao] = useState(true); 
+
+  const [meusAlugueis, setMeusAlugueis] = useState([]);
 
   useEffect(() => {
     if (!user || !token) {
@@ -46,32 +42,20 @@ function MeusEspacos() {
         }
       };
       fetchAlugueis();
+      const fetchMeusAlugueis = async () => {
+        try {
+          const response = await fetch(`https://localhost:3333/rentals/tenant/${user.id}`);
+          const data = await response.json();
+          setMeusAlugueis(data);
+        } catch (error) {
+          alert("Erro ao carregar seus aluguéis.");
+        }
+      };
+      fetchMeusAlugueis();
     }
   }, [user, token, navigate]);
 
-  const handleCadastrarEspaco = async (event) => {
-    event.preventDefault();
-    const newEspaco = { nome: nomeEspaco, descricao: descricaoEspaco, preco: precoEspaco, foto: fotoEspaco };
-    try {
-      const response = await fetch("https://localhost:3333/spaces", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newEspaco),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        alert("Espaço cadastrado com sucesso!");
-        setNomeEspaco("");
-        setDescricaoEspaco("");
-        setPrecoEspaco("");
-        setFotoEspaco(null);
-      } else {
-        alert("Erro ao cadastrar espaço: " + data.message);
-      }
-    } catch (error) {
-      alert("Erro ao conectar ao servidor.");
-    }
-  };
+  
 
   const handleExcluirAluguel = async (aluguelId) => {
     try {
@@ -103,7 +87,6 @@ function MeusEspacos() {
       if (response.ok) {
         alert("Aluguel aceito com sucesso");
   
-        // Atualiza o estado removendo o aluguel aceito da lista de pendentes
         setAlugueisPendentes((prevAlugueis) =>
           prevAlugueis.map((a) =>
             a.id === aluguel.id ? { ...a, status: "aprovado" } : a
@@ -134,19 +117,7 @@ function MeusEspacos() {
   };
 
   const handleEditarEspaco = (espaco) => {
-    navigate(`/novo-espaco/${espaco.id}`);
-  };
-
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFotoEspaco(URL.createObjectURL(file));
-    }
-  };
-
-  const toggleFormVisibility = () => {
-    setFormVisible(!formVisible);
+    navigate(`/editar-espaco/${espaco.id}`);
   };
 
   return (
@@ -154,6 +125,27 @@ function MeusEspacos() {
       <h2>Meus Espaços</h2>
       <button className="novo-espaco-btn" onClick={() => navigate("/novo-espaco")}>Novo Espaço</button>
       <div className="secoes">
+        <div className="espacos-alugados">
+          <h3>Aluguéis que Fiz</h3>
+          <div className="espacos-lista">
+            {meusAlugueis.length > 0 ? (
+              meusAlugueis.map((aluguel) => (
+                <div key={aluguel.id} className="espaco-card">
+                  <h4>Espaço ID: {aluguel.espaco_id}</h4>
+                  <p>Locador: {aluguel.locador}</p>
+                  <p>Data de Início: {formatDate(aluguel.data_inicio)}</p>
+                  <p>Data de Fim: {formatDate(aluguel.data_fim)}</p>
+                  <p>Valor Total: R$ {aluguel.valor_total}</p>
+                  <p>Status: {aluguel.status}</p>
+                  {aluguel.observacao && <p>Observação: {aluguel.observacao}</p>}
+                  {aluguel.contrato_id && <p>Contrato ID: {aluguel.contrato_id}</p>}
+                </div>
+              ))
+            ) : (
+              <p>Você ainda não fez nenhum aluguel.</p>
+            )}
+          </div>
+        </div>
         <div className="espacos-alugados">
           <h3>Aluguéis</h3>
           <div className="espacos-lista">
@@ -170,10 +162,11 @@ function MeusEspacos() {
                   {aluguel.observacao && <p>Observação: {aluguel.observacao}</p>}
                   {aluguel.contrato_id && <p>Contrato ID: {aluguel.contrato_id}</p>}
                   {aluguel.status !== 'aprovado' && (
-  <button className="editar-btn" onClick={() => handleAceitarAluguel(aluguel)}>
-    Aceitar
-  </button>
-)}                <button className="excluir-btn" onClick={() => handleExcluirAluguel(aluguel.id)}>Excluir</button>
+                    <button className="editar-btn" onClick={() => handleAceitarAluguel(aluguel)}>
+                      Aceitar
+                    </button>
+                  )}
+                <button className="excluir-btn" onClick={() => handleExcluirAluguel(aluguel.id)}>Excluir</button>
                 </div>
               ))
             ) : (

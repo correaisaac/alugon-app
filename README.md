@@ -21,9 +21,12 @@ npm install
 ```
 
 ### 2. iniciando a aplicação
+Execute o MySQL e crie o banco de dados com o arquivo alugabanco.sql
+Execute o arquivo inserts.txt em docs
+Execute o arquivo triggers.txt em docs
+inicie a API https://github.com/correaisaac/alugon-api
+Quando tudo estiver pronto, execute o front-end com o comando abaixo:
 ```bash
 npm start
 ```
-
-## Notas importantes
-26/02/2025 - Infelizmente não conseguimos concluir o projeto, ficaram faltando algumas funções, se tivermos a oportunidade, iremos concluir ele.
+Execute 

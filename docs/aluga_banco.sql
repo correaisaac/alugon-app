@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `aluga_banco`.`usuario` (
   `foto` LONGBLOB NOT NULL,
   `conta` VARCHAR(10) NOT NULL,
   `agencia` VARCHAR(5) NOT NULL,
+  `ativo` TINYINT DEFAULT 1
 >>>>>>> dev-v2
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
@@ -60,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `aluga_banco`.`espaco` (
   `imagem` LONGBLOB NOT NULL,
   `cidade` VARCHAR(45) NOT NULL,
   `bairro` VARCHAR(45) NOT NULL,
+  `ativo` TINYINT DEFAULT 1,
   PRIMARY KEY (`id`),
   INDEX `dono_idx` (`responsavel` ASC) ,
 >>>>>>> dev-v2
@@ -182,7 +184,6 @@ CREATE TABLE IF NOT EXISTS `aluga_banco`.`pagamento` (
 =======
 >>>>>>> dev-v2
   `forma_pagamento` ENUM('Pix', 'Boleto', 'TED', 'Cartão') NOT NULL,
-  `tipo_conta` VARCHAR(20) NOT NULL,
   `num_transacao` VARCHAR(45) NOT NULL,
   `data_pagamento` DATETIME NOT NULL,
   `fatura_id` INT NOT NULL,

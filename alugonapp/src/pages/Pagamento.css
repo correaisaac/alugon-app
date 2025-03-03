@@ -45,7 +45,7 @@
     width: 100%;
     padding: 12px;
     margin-top: 20px;
-    background: #4caf50;
+    background: #0056b3;
     color: white;
     font-size: 18px;
     border: none;
@@ -55,6 +55,6 @@
   }
   
   .pagamento-btn:hover {
-    background: #45a049;
+    background: #0056b3;
   }
   

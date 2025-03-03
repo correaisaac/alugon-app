@@ -14,16 +14,16 @@ function NovoAluguel() {
     contrato_id: "",
     status: "",
     observacao: "",
-    modelo_pagamento: "diário", // Modelo de pagamento inicial
+    modelo_pagamento: "diário", 
   });
   const { user, token } = useAuth();
   const navigate = useNavigate();
 
-  // Função para buscar os detalhes do espaço
   const fetchSpaceDetails = async () => {
     try {
       const response = await fetch(`https://localhost:3333/spaces/${id}`);
       const data = await response.json();
+      console.log(data);
       setSpace(data);
       setRentalData((prevState) => ({
         ...prevState,
@@ -50,7 +50,6 @@ function NovoAluguel() {
     fetchContracts();
   }, [id]);
 
-  // Função para manipular os campos de formulário
   const handleChange = (e) => {
     setRentalData({
       ...rentalData,
@@ -58,14 +57,13 @@ function NovoAluguel() {
     });
   };
 
-  // Função para calcular o valor total baseado no modelo de pagamento e no tempo de aluguel
-  const calculateTotalValue = () => {
+   const calculateTotalValue = () => {
     if (!rentalData.data_inicio || !rentalData.data_fim) return;
 
     const startDate = new Date(rentalData.data_inicio);
     const endDate = new Date(rentalData.data_fim);
     const diffTime = endDate - startDate;
-    const diffDays = diffTime / (1000 * 3600 * 24); // Converte a diferença de tempo em dias
+    const diffDays = diffTime / (1000 * 3600 * 24); 
 
     let total = 0;
     if (rentalData.modelo_pagamento === "diário") {
@@ -78,7 +76,6 @@ function NovoAluguel() {
       total = space.valor * (diffDays / 365);
     }
 
-    // Atualiza o valor total no estado
     setRentalData((prevState) => ({
       ...prevState,
       valor_total: total.toFixed(2),
@@ -89,7 +86,6 @@ function NovoAluguel() {
     calculateTotalValue();
   }, [rentalData.data_inicio, rentalData.data_fim, rentalData.modelo_pagamento]);
 
-  // Função para verificar se o contrato é compatível com o período
   const isContractValidForPeriod = (contract) => {
     if (!rentalData.data_inicio || !rentalData.data_fim) return false;
 
@@ -103,33 +99,28 @@ function NovoAluguel() {
     if (contract.modelo_pagamento === "mensal" && diffDays >= 30) return true;
     if (contract.modelo_pagamento === "anual" && diffDays >= 365) return true;
 
-    return false; // Se o contrato não for válido para o período
+    return false; 
   };
 
-  // Função para submeter o formulário de novo aluguel
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Verifica se o usuário está logado
     if (!user || !token) {
       alert("Você precisa estar logado para realizar o aluguel!");
       return;
     }
 
-    // Verifica se um contrato foi selecionado
     if (!rentalData.contrato_id) {
       alert("Por favor, selecione um contrato.");
       return;
     }
 
-    // Verifica se o locatário não é o locador
     if (space.responsavel === user.id) {
       alert("O locatário não pode ser o mesmo que o locador.");
       return;
     }
 
     try {
-      // Criação do aluguel
       const response = await fetch("https://localhost:3333/rentals", {
         method: "POST",
         headers: {
@@ -148,7 +139,6 @@ function NovoAluguel() {
       if (response.ok) {
         alert("Aluguel realizado com sucesso!");
 
-        // Atualizar o status do espaço para indisponível
         await fetch(`https://localhost:3333/spaces/${id}`, {
           method: "PUT",
           headers: {
@@ -156,11 +146,10 @@ function NovoAluguel() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            disponibilidade: "indisponível", // Defina o valor adequado conforme o seu modelo
+            disponibilidade: "indisponível", 
           }),
         });
-
-        // Redireciona para a página de detalhes do espaço após o aluguel
+          
         navigate(`/space/${id}`);
       } else {
         alert("Erro ao realizar o aluguel. Tente novamente.");
@@ -202,7 +191,7 @@ function NovoAluguel() {
             value={rentalData.data_fim}
             onChange={handleChange}
             required
-            onBlur={calculateTotalValue} // Chama o cálculo quando o campo perde o foco
+            onBlur={calculateTotalValue}
           />
         </div>
         <div className="form-group">
@@ -221,7 +210,7 @@ function NovoAluguel() {
                 <option
                   key={contract.id}
                   value={contract.id}
-                  disabled={!validForPeriod} // Desabilita contratos incompatíveis
+                  disabled={!validForPeriod}
                 >
                   {contract.modelo_pagamento} - {contract.condicoes_pagamento}
                   {validForPeriod ? "" : " (Incompatível com o período)"}

@@ -6,14 +6,13 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); 
   const [token, setToken] = useState(null);
 
-  // Carregar dados do localStorage quando o componente for montado
   useEffect(() => {
     const storedUser = sessionStorage.getItem('user');
     const storedToken = sessionStorage.getItem('token');
 
     
     if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser)); // O user foi salvo como string, então precisa ser convertido de volta.
+      setUser(JSON.parse(storedUser));
       setToken(storedToken);
     }
   }, []);
@@ -22,7 +21,6 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
     setToken(authToken); 
 
-    // Salvar no localStorage
     sessionStorage.setItem('user', JSON.stringify(userData));
     sessionStorage.setItem('token', authToken);
 
@@ -32,7 +30,6 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setToken(null);
 
-    // Remover do localStorage
     localStorage.removeItem('user');
     localStorage.removeItem('token');
   };

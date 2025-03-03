@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Pagamento.css";
-import { useAuth } from "../context/AuthContext";
 
 function formatDate(isoDate) {
   if (!isoDate) return "";
   return new Date(isoDate).toLocaleDateString("pt-BR", { timeZone: "UTC" });
 }
 
-// Função para gerar um código de validação seguro
 function generateValidationCode(faturaId) {
   return Math.random().toString(36).substring(2, 10).toUpperCase() + faturaId;
 }
@@ -19,7 +17,6 @@ function Pagamento() {
   const [pagamento, setPagamento] = useState(null);
   const [loading, setLoading] = useState(false);
   const [validationCode, setValidationCode] = useState("");
-  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,9 +52,9 @@ function Pagamento() {
 
       if (response.ok) {
         const paymentData = await response.json();
-        setPagamento(paymentData);  // Armazena o ID do pagamento
+        setPagamento(paymentData); 
         alert("Pagamento criado com sucesso! Gere um boleto para prosseguir.");
-        fetchBoleto(paymentData.id);  // Buscar o boleto gerado
+        fetchBoleto(paymentData.id); 
       } else {
         alert("Erro ao criar pagamento.");
       }
@@ -71,7 +68,6 @@ function Pagamento() {
   const handleValidarPagamento = async () => {
     if (!fatura || !pagamento) return;
     try {
-      // Busca o pagamento no banco com base no ID do pagamento
       const search = await fetch(`https://localhost:3333/payments/${pagamento.id}`);
       
       if (!search.ok) {
@@ -79,13 +75,10 @@ function Pagamento() {
         return;
       }
 
-      const paymentData = await search.json(); // Transformando a resposta em objeto JSON
-      const validCode = paymentData.num_transacao; // Acessar o código de validação correto
-
-      // Comparar o código de validação inserido com o código do banco
+      const paymentData = await search.json(); 
+      const validCode = paymentData.num_transacao;
       if (validationCode === validCode) {
         alert("Pagamento validado com sucesso!");
-        // Atualiza o status da fatura para "Pago"
         await fetch(`https://localhost:3333/invoices/${fatura.id}`, {
           method: "PUT",
           headers: {
@@ -121,7 +114,6 @@ function Pagamento() {
         const blob = new Blob([new Uint8Array(atob(paymentData.boleto_pdf).split("").map(c => c.charCodeAt(0)))], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);
         
-        // Abre o PDF em uma nova aba
         window.open(url, '_blank');
       } else {
         alert("Boleto não encontrado.");

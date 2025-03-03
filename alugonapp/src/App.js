@@ -13,6 +13,7 @@ import NovoAluguel from './pages/NovoAluguel';
 import Faturas from './pages/Faturas';
 import Pagamento from './pages/Pagamento';
 import NovoEspaco from './pages/NovoEspaco';
+import EdicaoUsuario from './pages/EdicaoUsuario';
 function App() {
   return (
     <AuthProvider> 
@@ -26,10 +27,11 @@ function App() {
           <Route path="/space/:id" element={<SpaceDetail />} /> 
           <Route path="/perfil" element={<Perfil />} /> 
           <Route path="/faturas" element={<Faturas />} /> 
-          <Route path="/novo-aluguel/:id" element={<NovoAluguel />} /> {/* Rota para novo aluguel */}
+          <Route path="/novo-aluguel/:id" element={<NovoAluguel />} /> 
           <Route path="/pagamento/:id" element={<Pagamento />} />
           <Route path="/novo-espaco" element={<NovoEspaco />}/>
-          <Route path="/novo-espaco/:id" element={<NovoEspaco />}/>
+          <Route path="/editar-espaco/:id" element={<NovoEspaco />}/>
+          <Route path="/editar-usuario/:id" element={<EdicaoUsuario />}/>
         </Routes>
         <Footer />
       </Router>

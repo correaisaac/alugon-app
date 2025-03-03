@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Importar useNavigate
+import { Link, useNavigate } from "react-router-dom"; 
 import "./Cadastro.css";
 
 function Cadastro() {
@@ -10,10 +10,10 @@ function Cadastro() {
   const [dataNascimento, setDataNascimento] = useState("");
   const [cpf, setCpf] = useState("");
   const [telefone, setTelefone] = useState("");
-  const [fotoPerfil, setFotoPerfil] = useState(null); // Novo estado para a foto
-  const [conta, setConta] = useState(""); // Novo estado para a conta
-  const [agencia, setAgencia] = useState(""); // Novo estado para a agência
-  const navigate = useNavigate(); // Definir o hook de navegação
+  const [fotoPerfil, setFotoPerfil] = useState(null); 
+  const [conta, setConta] = useState(""); 
+  const [agencia, setAgencia] = useState(""); 
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -24,7 +24,6 @@ function Cadastro() {
     }
 
     try {
-      // Se houver foto, converta para base64
       let fotoBase64 = "";
       if (fotoPerfil) {
         const reader = new FileReader();
@@ -32,7 +31,7 @@ function Cadastro() {
           fotoBase64 = reader.result;
           enviarDados();
         };
-        reader.readAsDataURL(fotoPerfil); // Converte a foto em base64
+        reader.readAsDataURL(fotoPerfil); 
       } else {
         enviarDados();
       }
@@ -48,9 +47,9 @@ function Cadastro() {
             telefone,
             email,
             senha,
-            foto: fotoBase64, // Envia a foto como base64
-            conta, // Envia a conta
-            agencia, // Envia a agência
+            foto: fotoBase64, 
+            conta, 
+            agencia, 
           }),        
         });
 
@@ -179,7 +178,7 @@ function Cadastro() {
             type="file"
             id="fotoPerfil"
             accept="image/*"
-            onChange={(e) => setFotoPerfil(e.target.files[0])} // Atualiza o estado com o arquivo
+            onChange={(e) => setFotoPerfil(e.target.files[0])} 
           />{" "}
         </div>
         <button type="submit" className="cadastro-btn">

@@ -1,11 +1,10 @@
-import { useState } from 'react'; // Importe o hook useState
+import { useState } from 'react'; 
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Header() {
   const { user, logout } = useAuth();
-  const [menuOpen, setMenuOpen] = useState(false); // Estado para controlar a abertura do menu
-
+  const [menuOpen, setMenuOpen] = useState(false); 
   const navLinks = user
     ? [
         { to: "/", label: "Home" },
@@ -20,7 +19,7 @@ function Header() {
       ];
 
   const toggleMenu = () => {
-    setMenuOpen(!menuOpen); // Alterna o estado do menu (aberto/fechado)
+    setMenuOpen(!menuOpen); 
   };
 
   return (
@@ -40,7 +39,6 @@ function Header() {
         </ul>
       </nav>
 
-      {/* Menu lateral para mobile */}
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
         <button className="close-menu" onClick={toggleMenu}>&times;</button>
         <ul>
