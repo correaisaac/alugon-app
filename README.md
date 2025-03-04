@@ -4,7 +4,7 @@ Este APP foi desenvolvido com react e js para espaços de alugaveis.
 
 link do backend: https://github.com/correaisaac/alugon-api
 
-link do vídeo no YouTube: https://youtu.be/yeE5d3cDP10
+link do vídeo no YouTube: [https://youtu.be/yeE5d3cDP10](https://youtu.be/Z0-nsDJiA1Q)
 
 Informações como: DVP ou o estrutura do banco de dados, você pode encontrar na pasta docs
 
